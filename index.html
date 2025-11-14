@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepehr Vahedi | Software Engineer & Researcher</title>
+    <meta name="description" content="Software Engineer specializing in AI-powered development tools, distributed systems, and automated testing.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="#" class="logo">SV</a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" class="nav-cv-link">
+                <i class="fas fa-file-pdf"></i> CV
+            </a></li>
+        </ul>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-profile">
+                <div class="profile-image-wrapper">
+                    <img src="assets/profile_picture.jpg" alt="Sepehr Vahedi" class="profile-image">
+                    <div class="profile-status"></div>
+                </div>
+            </div>
+            <h1 class="hero-title">
+                Sepehr Vahedi
+            </h1>
+            <p class="hero-subtitle">Software Engineer & AI Researcher</p>
+            <p class="hero-description">
+                Building reliable, intelligent software engineering tools at the intersection of
+                distributed systems and AI-assisted development.
+            </p>
+            <div class="hero-links">
+                <a href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-file-pdf"></i> Download CV
+                </a>
+                <a href="https://github.com/sepehrvahedi" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com/in/sepehr-vahedi-8a8216216" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="mailto:sepehr.vahedi@gmail.com" class="btn btn-secondary">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a Computer Engineering student at <strong>Sharif University of Technology</strong>
+                        and a Software Engineer at <strong>Tapsi</strong>, where I've architected systems processing
+                        over 1M daily events and built microservices serving 10M+ monthly users.
+                    </p>
+                    <p>
+                        Currently, I'm conducting research in <strong>AI for Software Engineering</strong>,
+                        focusing on automated test generation using multi-agent LLM frameworks and cost-efficient
+                        GitHub issue title generation. My work bridges practical industry experience with
+                        rigorous research methodology.
+                    </p>
+                    <div class="credentials">
+                        <div class="credential-item">
+                            <i class="fas fa-university"></i>
+                            <div>
+                                <strong>Sharif University of Technology</strong>
+                                <span>B.Sc. Computer Engineering</span>
+                            </div>
+                        </div>
+                        <div class="credential-item">
+                            <i class="fas fa-briefcase"></i>
+                            <div>
+                                <strong>Tapsi (Co-Op Program)</strong>
+                                <span>Software Engineer, 2022-2024</span>
+                            </div>
+                        </div>
+                        <div class="credential-item">
+                            <i class="fas fa-flask"></i>
+                            <div>
+                                <strong>ISE Lab & SQR Lab</strong>
+                                <span>Research Assistant, 2025-Present</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Research</h2>
+            <div class="research-grid">
+                <div class="research-card">
+                    <div class="research-header">
+                        <h3>Multi-Agent Test Generation</h3>
+                        <span class="badge">In Progress</span>
+                    </div>
+                    <p class="research-lab">Software Quality Research Lab, Sharif University</p>
+                    <p class="research-description">
+                        Developing an LLM-powered framework with role-based prompting (edge-case specialist,
+                        security auditor, integration tester, performance analyst) achieving <strong>94% coverage</strong>
+                        on 2,200+ Python functions with <strong>72% redundancy reduction</strong> via semantic clustering.
+                    </p>
+                    <div class="research-links">
+                        <a href="https://testcouncil.com" target="_blank" class="link-btn">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                        <a href="https://github.com/sepehrvahedi/testgen-council" target="_blank" class="link-btn">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
+                    </div>
+                </div>
+
+                <div class="research-card">
+                    <div class="research-header">
+                        <h3>Cost-Efficient GitHub Issue Generation</h3>
+                        <span class="badge badge-secondary">Paper in Prep</span>
+                    </div>
+                    <p class="research-lab">Intelligent Software Engineering Lab, Sharif University</p>
+                    <p class="research-description">
+                        Built a deep learning model reducing LLM token costs by <strong>37.3%</strong> while maintaining
+                        semantic quality within <strong>0.4%</strong> of GPT baseline (BERTScore: 0.877 vs 0.873) across
+                        2.6M+ GitHub issues. Systematic benchmarking against T5, RAG, and GPT variants.
+                    </p>
+                    <div class="research-metrics">
+                        <div class="metric">
+                            <span class="metric-value">37.3%</span>
+                            <span class="metric-label">Cost Reduction</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">2.6M+</span>
+                            <span class="metric-label">Issues Analyzed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <h2 class="section-title">Industry Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Software Engineer</h3>
+                            <span class="timeline-date">Feb 2022 - Dec 2024</span>
+                        </div>
+                        <p class="timeline-company">Tapsi | Iran's Leading Ride-Hailing Platform</p>
+                        <ul class="timeline-achievements">
+                            <li>Architected Kafka-based event-driven microservices handling <strong>1M+ daily events</strong></li>
+                            <li>Doubled delivery capacity via parallel routing system with sub-100ms latency</li>
+                            <li>Cut infrastructure costs <strong>45%</strong> migrating Node.js monolith to reactive Spring Boot</li>
+                            <li>Co-developed Iran's first school transport platform (2K+ drivers, 12K+ students)</li>
+                        </ul>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Spring Boot</span>
+                            <span class="tech-tag">Kafka</span>
+                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">Redis</span>
+                            <span class="tech-tag">Kubernetes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Co-Founder & Product Designer</h3>
+                            <span class="timeline-date">Feb 2020 - Feb 2021</span>
+                        </div>
+                        <p class="timeline-company">RabinCash | Cryptocurrency Exchange</p>
+                        <ul class="timeline-achievements">
+                            <li>Co-founded one of Iran's first crypto exchanges with dual P2P/B2P platforms</li>
+                            <li>Designed end-to-end trading UX supporting 20+ trading pairs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Selected Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>TestCouncil Platform</h3>
+                        <a href="https://github.com/sepehrvahedi/testgen-council" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <p class="project-description">
+                        Production-grade multi-agent test generation platform using GPT-4, Claude, and Gemini.
+                        Achieves 94% coverage with 72% redundancy reduction via semantic clustering.
+                    </p>
+                    <div class="project-footer">
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">LLMs</span>
+                            <span class="tech-tag">PyTorch</span>
+                        </div>
+                        <a href="https://testcouncil.com" target="_blank" class="demo-link">
+                            Live Demo →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Multi-Agent Paper Review</h3>
+                        <a href="https://github.com/sepehrvahedi/automatic-paper-critique" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <p class="project-description">
+                        Automated peer review system with 85% accuracy using distributed LLM agents (GPT-4, Claude, Gemini)
+                        and consensus voting mechanisms for bias reduction.
+                    </p>
+                    <div class="project-footer">
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Multi-Agent</span>
+                            <span class="tech-tag">NLP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>C-Minus Compiler</h3>
+                        <a href="https://github.com/sepehrvahedi/Compiler-C-Minus" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <p class="project-description">
+                        Complete compiler implementation with lexer, LL(1) predictive parser, semantic analysis,
+                        and symbol table. 100% test program success rate with panic-mode error recovery.
+                    </p>
+                    <div class="project-footer">
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Compilers</span>
+                            <span class="tech-tag">Parsing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="projects-footer">
+                <a href="https://github.com/sepehrvahedi" target="_blank" class="btn btn-secondary">
+                    View All Projects on GitHub →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-content">
+                <p class="contact-description">
+                    I'm always interested in discussing software engineering, AI research, or potential collaborations.
+                </p>
+                <div class="contact-methods">
+                    <a href="mailto:sepehr.vahedi@gmail.com" class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong>
+                            <span>sepehr.vahedi@gmail.com</span>
+                        </div>
+                    </a>
+                    <a href="https://linkedin.com/in/sepehr-vahedi-8a8216216" target="_blank" class="contact-card">
+                        <i class="fab fa-linkedin"></i>
+                        <div>
+                            <strong>LinkedIn</strong>
+                            <span>sepehr-vahedi</span>
+                        </div>
+                    </a>
+                    <a href="https://github.com/sepehrvahedi" target="_blank" class="contact-card">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <strong>GitHub</strong>
+                            <span>@sepehrvahedi</span>
+                        </div>
+                    </a>
+                    <a href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" class="contact-card contact-card-cv">
+                        <i class="fas fa-file-pdf"></i>
+                        <div>
+                            <strong>Download CV</strong>
+                            <span>View full resume (PDF)</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Sepehr Vahedi. Built with purpose, not templates.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
