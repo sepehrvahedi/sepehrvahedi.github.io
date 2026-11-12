@@ -69,6 +69,9 @@ RESEARCH
 
 OPEN SOURCE
 
+  grad-tracker       UK graduate roles ranked against a CV with a local rule
+                     scorer; web UI, CLI and an agent skill. 98 tests.
+                     github.com/sepehrvahedi/grad-tracker
   local-rate-limit   Per-user, per-API rate limiting at the proxy (Envoy,
                      Lua, Istio). github.com/sepehrvahedi/local-rate-limit
   testgen-council    The thesis code, with an offline test suite.
