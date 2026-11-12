@@ -1,0 +1,94 @@
+SEPEHR VAHEDI                                                       London, UK
+Software engineer                                    sepehr.vahedi@gmail.com
+Backend, distributed systems, ML infrastructure      sepehrvahedi.github.io
+                                                     github.com/sepehrvahedi
+
+Available from September 2027. UK Graduate visa, no sponsorship needed to start.
+
+
+EDUCATION
+
+  MSc Software Systems Engineering                    Sep 2026 - Sep 2027 (exp.)
+  University College London (UCL)
+
+  BSc Computer Engineering (Software Engineering)     Sep 2020 - Jul 2026
+  Sharif University of Technology, Tehran
+  GPA 16.71/20 (18.25/20 in the last two years). Six years, alongside
+  full-time work at Tapsi.
+
+
+EXPERIENCE
+
+  PillSorted, NHS online delivery pharmacy            Cambridge, UK (hybrid)
+  Software Engineer (part-time)                       Nov 2026 - present
+    - Sole engineer on Ask PillSorted, an iOS/Android AI chat answering
+      patients from their own pharmacy records.
+    - Designed its LLM agent on Amazon Bedrock: MCP tools, rule-based
+      guardrails and RAG citing NHS sources.
+
+  Tapsi, ride-hailing and delivery app, 10M+ monthly users      Tehran, Iran
+  Senior Software Engineer, Delivery and Marketplace  Dec 2025 - Sep 2026
+    - Designed the Kotlin gRPC routing service behind every delivery ETA;
+      moved 5 services off the old estimator.
+    - Raised ETA model-server throughput 54x (70 to 3,800 req/s per pod) by
+      fixing Triton serialization. Median latency at peak: 866 to 62 ms.
+      Outputs verified identical on 19,200 requests.
+    - Took the first delivery ML models to production via shadow and A/B
+      tests: ETA error 24% to 19%.
+
+  Senior Software Engineer                            Jan 2024 - Dec 2024
+    - Built the event-sourced Kafka backend (1M+ events/day) for
+      multi-delivery orders: 2x daily deliveries.
+    - Rewrote the ride-request service from Node.js to Spring Boot with zero
+      downtime: 45% lower infrastructure cost.
+
+  Software Engineer                                   Feb 2022 - Dec 2023
+    - Built the backend of Iran's first school-transport platform, 2,000+
+      drivers and 12,000+ students, in 1.5 months.
+    - Built a mesh-level rate limiter on my own initiative; adopted by every
+      external-facing service.
+
+  RabinCash, P2P and B2P crypto exchange                        Tehran, Iran
+  Co-founder and product designer                     Feb 2020 - Feb 2021
+    - Owned product and UX design for an exchange with 20+ trading pairs,
+      and led the two-person front-end team.
+
+
+RESEARCH
+
+  TestCouncil: multi-agent LLM unit-test generation (BSc thesis)
+  Software Quality Research Lab, Sharif. Prof. S.-H. Mirian-Hosseinabadi.
+    A council of Qwen, DeepSeek and Gemini agents writes unit tests for
+    Python functions: 92.5% branch coverage, 36+ points above the best
+    single model. github.com/sepehrvahedi/testgen-council
+
+  LLM issue-title generation
+  Intelligent Software Engineering Lab, Sharif. Prof. Abbas Heydarnoori.
+    Learned context selection cut input tokens 37.3% at near-GPT-4 quality.
+
+
+OPEN SOURCE
+
+  local-rate-limit   Per-user, per-API rate limiting at the proxy (Envoy,
+                     Lua, Istio). github.com/sepehrvahedi/local-rate-limit
+  testgen-council    The thesis code, with an offline test suite.
+
+
+SKILLS
+
+  Languages       Kotlin, Java, Python, TypeScript, C#, Go, C++, Swift
+  Backend         Spring Boot, Project Reactor, gRPC, REST, Kafka,
+                  event-driven microservices, JUnit, Mockito
+  AI and ML       Amazon Bedrock, MCP, RAG, LLM agents, NVIDIA Triton,
+                  KServe v2, ONNX, PyTorch, Hugging Face
+  Infrastructure  AWS, Terraform, Kubernetes, Docker, Helm, ArgoCD,
+                  GitLab CI/CD, Istio, Envoy, Prometheus, Grafana
+  Data            SQL, PostgreSQL, pgvector, MongoDB, Redis, Hazelcast
+  Spoken          English (IELTS 8.0), German (intermediate), Persian (native)
+
+
+AWARDS
+
+  Codeforces Candidate Master (max 2075, top 1.5%); 420+ problems.
+  Iran National Olympiad in Informatics, top-50 finalist (2018, 2019).
+  AUT Programming Contest, 3rd of 65.

@@ -1,165 +1,158 @@
+// Everything on the page works without this file. It adds: the theme switch, keyboard navigation,
+// a small command line (press ":"), the token bucket in figure 3, and the page weight in the colophon.
 "use strict";
 
-/* ---------------- theme ---------------- */
+const $ = (s) => document.querySelector(s);
+const sections = [...document.querySelectorAll("main section")];
+
+// ------------------------------------------------------------------ theme
 const root = document.documentElement;
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  root.setAttribute("data-theme", next);
-  try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
-});
+const systemDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+const currentTheme = () => root.dataset.theme || (systemDark() ? "dark" : "light");
+function setTheme(theme) {
+  root.dataset.theme = theme;
+  try { localStorage.setItem("theme", theme); } catch (e) { /* private mode */ }
+  $("#theme").textContent = theme === "dark" ? "light" : "dark";     // the button names where it takes you
+}
+$("#theme").textContent = currentTheme() === "dark" ? "light" : "dark";
+$("#theme").addEventListener("click", () => setTheme(currentTheme() === "dark" ? "light" : "dark"));
 
-/* ---------------- mobile menu ---------------- */
-const menuBtn = document.getElementById("menu-toggle");
-const navLinks = document.getElementById("nav-links");
-menuBtn.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
-  menuBtn.setAttribute("aria-expanded", String(open));
-});
-navLinks.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") { navLinks.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
-});
+// ------------------------------------------------------------------ where am I: mark the current section in the contents
+const tocLinks = new Map([...document.querySelectorAll(".toc li a")].map((a) => [a.getAttribute("href").slice(1), a]));
+let current = 0;
+const spy = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (!e.isIntersecting) continue;
+    current = sections.indexOf(e.target);
+    for (const [id, a] of tocLinks) a.toggleAttribute("aria-current", id === e.target.id);
+  }
+}, { rootMargin: "-20% 0px -70% 0px" }) : null;
+if (spy) sections.forEach((s) => spy.observe(s));
 
-/* ---------------- active section + reveal ---------------- */
-const sections = [...document.querySelectorAll("main section[id]")];
-const linkFor = (id) => navLinks.querySelector(`a[href="#${id}"]`);
-if ("IntersectionObserver" in window) {
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (en.isIntersecting) {
-        navLinks.querySelectorAll("a").forEach((a) => a.classList.remove("active"));
-        const a = linkFor(en.target.id);
-        if (a) a.classList.add("active");
-      }
-    });
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  sections.forEach((s) => spy.observe(s));
-
-  const rev = new IntersectionObserver((entries) => {
-    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); rev.unobserve(en.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll(".commit, .card, .code, .edu-row").forEach((el) => { el.classList.add("reveal"); rev.observe(el); });
+function go(index) {
+  current = Math.max(0, Math.min(sections.length - 1, index));
+  sections[current].scrollIntoView({ block: "start" });
+  history.replaceState(null, "", "#" + sections[current].id);
 }
 
-/* ---------------- terminal ---------------- */
-const out = document.getElementById("term-output");
-const form = document.getElementById("term-form");
-const input = document.getElementById("term-input");
-const body = document.getElementById("term-body");
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-
-const CV = "assets/CV_Sepehr_Vahedi.pdf";
+// ------------------------------------------------------------------ command line
+const cmd = $("#cmd"), input = $("#cmd-in"), out = $("#cmd-out");
+const open = (url) => { window.location.href = url; };
+const esc = (text) => String(text).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 const COMMANDS = {
-  help: () => [
-    "<span class='t-hl'>available commands</span>",
-    "  <span class='t-key'>whoami</span>      who is this",
-    "  <span class='t-key'>about</span>       the short version",
-    "  <span class='t-key'>experience</span>  git log of my career",
-    "  <span class='t-key'>projects</span>    things I built",
-    "  <span class='t-key'>research</span>    LLM + testing research",
-    "  <span class='t-key'>skills</span>      the stack",
-    "  <span class='t-key'>cv</span>          open my CV (pdf)",
-    "  <span class='t-key'>contact</span>     how to reach me",
-    "  <span class='t-key'>theme</span>       toggle light / dark",
-    "  <span class='t-key'>clear</span>       clear the screen",
-  ].join("\n"),
-  whoami: () => "Sepehr Vahedi, software engineer in London.\nBackend · distributed systems · ML infrastructure.",
-  about: () => "3.5 years full-time at Tapsi (10M+ monthly active users), promoted to Senior in Jan 2024.\nMSc Software Systems Engineering @ UCL, graduating Sep 2027.\nCodeforces Candidate Master (max 2075).",
-  experience: () => [
-    "<span class='t-hl'>a3f9c21</span> Senior SWE, Delivery and Marketplace @ Tapsi  <span class='t-dim'>(2025-12..2026-09)</span>",
-    "        54x model-server throughput · ETA MAPE 24% → 19% · owned delivery-routing",
-    "<span class='t-hl'>7be2d04</span> Senior SWE @ Tapsi                          <span class='t-dim'>(2024-01..2024-12)</span>",
-    "        event-sourced Kafka backend, deliveries doubled · −45% infra cost rewrite",
-    "<span class='t-hl'>1c08e5a</span> Software Engineer @ Tapsi                   <span class='t-dim'>(2022-02..2023-12)</span>",
-    "        −67% GPS-service load · school-transport platform for 12,000+ students",
-    "<span class='t-hl'>0e41b7f</span> Co-Founder @ RabinCash                      <span class='t-dim'>(2020-02..2021-02)</span>",
-    "<span class='t-dim'>→ full details: <a href='#experience'>#experience</a></span>",
-  ].join("\n"),
-  projects: () => [
-    "drwxr-xr-x  <a href='https://github.com/sepehrvahedi/testgen-council' target='_blank' rel='noopener'>testgen-council/</a>        multi-agent LLM test generation",
-    "drwxr-xr-x  <a href='https://github.com/sepehrvahedi/local-rate-limit' target='_blank' rel='noopener'>local-rate-limit/</a>       Envoy + Istio per-user rate limiting",
-    "drwxr-xr-x  <a href='https://github.com/sepehrvahedi/automatic-paper-critique' target='_blank' rel='noopener'>automatic-paper-critique/</a> 4 LLMs + Borda count",
-    "drwxr-xr-x  <a href='https://github.com/sepehrvahedi/VenueBooker' target='_blank' rel='noopener'>VenueBooker/</a>            Kotlin · Spring Boot · Kafka",
-    "drwxr-xr-x  <a href='https://github.com/sepehrvahedi/Compiler-C-Minus' target='_blank' rel='noopener'>Compiler-C-Minus/</a>       compiler for a C subset",
-  ].join("\n"),
-  research: () => "TestCouncil: 84.6% line / 92.5% branch coverage, 36+ pts over the best single model.\nIssue titles: −37.3% LLM input tokens, within 0.004 BERTScore of GPT-4.",
-  skills: () => "kotlin java python go c++ typescript sql\nspring-boot reactor grpc kafka · triton kserve onnx pytorch\nkubernetes docker helm argocd istio envoy prometheus grafana",
-  cv: () => { window.open(CV, "_blank", "noopener"); return `opening <a href='${CV}' target='_blank' rel='noopener'>${CV}</a> …`; },
-  contact: () => "email     <a href='mailto:sepehr.vahedi@gmail.com'>sepehr.vahedi@gmail.com</a>\nlinkedin  <a href='https://www.linkedin.com/in/sepehr-vahedi-8a8216216/' target='_blank' rel='noopener'>/in/sepehr-vahedi-8a8216216</a>\ngithub    <a href='https://github.com/sepehrvahedi' target='_blank' rel='noopener'>github.com/sepehrvahedi</a>",
-  theme: () => { document.getElementById("theme-toggle").click(); return `theme → ${root.getAttribute("data-theme")}`; },
-  ls: () => "about.md  experience.log  projects/  research/  stack.kt  cv.pdf",
-  "cat cv.pdf": () => COMMANDS.cv(),
-  "sudo hire-me": () => "[sudo] password for recruiter: ********\n<span class='t-hl'>access granted.</span> Available from September 2027 · <a href='mailto:sepehr.vahedi@gmail.com'>say hello</a>",
-  "rm -rf /": () => "<span class='t-err'>nice try.</span> This system has on-call coverage.",
-  exit: () => "There is no escape. Try <span class='t-key'>contact</span> instead.",
-  pwd: () => "/home/sepehr/london",
-  date: () => new Date().toString(),
+  help: ["this list", () => say(Object.entries(COMMANDS).map(([k, [text]]) => `<b>${k.padEnd(9)}</b> ${esc(text)}`).join("\n"), true)],
+  goto: ["goto NAME: abstract, results, experience, research, open-source, also, contact", (arg) => {
+    const i = sections.findIndex((s) => s.id.startsWith((arg || "").toLowerCase()));
+    if (!arg || i < 0) return say("goto where? " + sections.map((s) => s.id).join(", "), true);
+    go(i); close();
+  }],
+  cv: ["open the CV (pdf)", () => open("assets/CV_Sepehr_Vahedi.pdf")],
+  "ml-cv": ["open the ML-platform CV (pdf)", () => open("assets/CV_Sepehr_Vahedi_ML.pdf")],
+  txt: ["open the CV as plain text", () => open("cv.txt")],
+  email: ["write to me", () => open("mailto:sepehr.vahedi@gmail.com")],
+  github: ["github.com/sepehrvahedi", () => open("https://github.com/sepehrvahedi")],
+  linkedin: ["LinkedIn profile", () => open("https://www.linkedin.com/in/sepehr-vahedi-8a8216216/")],
+  theme: ["theme [light|dark]", (arg) => { setTheme(arg === "light" || arg === "dark" ? arg : currentTheme() === "dark" ? "light" : "dark"); close(); }],
+  top: ["back to the top", () => { window.scrollTo({ top: 0 }); close(); }],
+  source: ["read the source of this page", () => open("https://github.com/sepehrvahedi/sepehrvahedi.github.io")],
+  print: ["print this page as a CV", () => { close(); window.print(); }],
+  q: ["close this line", () => close()],
 };
-const ALIASES = { h: "help", "?": "help", resume: "cv", "cv.pdf": "cv", stack: "skills", work: "experience", ll: "ls", "ls -la": "ls", email: "contact" };
-
-const history = [];
-let hIndex = 0;
-
-function print(cmd, html, cls = "t-out") {
-  if (cmd !== null) {
-    const line = document.createElement("div");
-    line.innerHTML = `<span class="t-ps1">sepehr@london:~$</span> <span class="t-cmd">${esc(cmd)}</span>`;
-    out.appendChild(line);
-  }
-  if (html) {
-    const res = document.createElement("div");
-    res.className = cls;
-    res.innerHTML = html;
-    out.appendChild(res);
-  }
-  body.scrollTop = body.scrollHeight;
+function say(text, keepOpen) {
+  out.innerHTML = text;
+  if (!keepOpen) setTimeout(close, 1600);
 }
-
-function run(raw) {
-  const cmd = raw.trim().replace(/\s+/g, " ");
-  if (!cmd) return print("", "");
-  history.push(cmd); hIndex = history.length;
-  const key = ALIASES[cmd.toLowerCase()] || cmd.toLowerCase();
-  if (key === "clear") { out.innerHTML = ""; return; }
-  const fn = COMMANDS[key];
-  if (fn) print(cmd, fn());
-  else print(cmd, `command not found: ${esc(cmd.split(" ")[0])}. Type <span class='t-key'>help</span>.`, "t-out t-err");
+function show() {
+  cmd.hidden = false; out.textContent = ""; input.value = ""; input.focus();
 }
-
-form.addEventListener("submit", (e) => { e.preventDefault(); run(input.value); input.value = ""; });
-input.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowUp" && history.length) { hIndex = Math.max(0, hIndex - 1); input.value = history[hIndex]; e.preventDefault(); }
-  else if (e.key === "ArrowDown" && history.length) { hIndex = Math.min(history.length, hIndex + 1); input.value = history[hIndex] || ""; e.preventDefault(); }
-  else if (e.key === "Tab") {
-    e.preventDefault();
-    const v = input.value.toLowerCase();
-    const hit = Object.keys(COMMANDS).find((c) => v && c.startsWith(v));
-    if (hit) input.value = hit;
-  } else if (e.key === "l" && e.ctrlKey) { e.preventDefault(); out.innerHTML = ""; }
+function close() {
+  cmd.hidden = true; input.blur();
+}
+function complete(prefix) {
+  return Object.keys(COMMANDS).filter((k) => k.startsWith(prefix));
+}
+cmd.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const [name, ...rest] = input.value.trim().replace(/^:/, "").split(/\s+/);
+  if (!name) return close();
+  const matches = COMMANDS[name] ? [name] : complete(name);
+  if (matches.length !== 1) return say(matches.length ? "which one? " + matches.join(", ") : `not a command: ${esc(name)}. Try help.`, true);
+  input.value = "";
+  COMMANDS[matches[0]][1](rest.join(" "));
 });
-body.addEventListener("click", () => { if (!window.getSelection().toString()) input.focus({ preventScroll: true }); });
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { e.preventDefault(); close(); }
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const matches = complete(input.value.trim());
+    if (matches.length === 1) input.value = matches[0] + " ";
+    else if (matches.length) say(matches.join("  "), true);
+  }
+});
+$("#open-cmd").addEventListener("click", () => (cmd.hidden ? show() : close()));
 
-/* boot sequence: type a few commands, then hand over to the visitor */
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const BOOT = ["whoami", "cat now.txt", "help"];
-const BOOT_OUT = {
-  "cat now.txt": "MSc Software Systems Engineering @ UCL · open to SWE roles from Sep 2027\nprevious: 3.5 years @ Tapsi · 54x throughput · ETA error 24% → 19%",
-};
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// ------------------------------------------------------------------ keys
+let lastG = 0;
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  const keys = {
+    j: () => go(current + 1), k: () => go(current - 1),
+    G: () => go(sections.length - 1),
+    g: () => { if (Date.now() - lastG < 500) { window.scrollTo({ top: 0 }); current = 0; } lastG = Date.now(); },
+    t: () => setTheme(currentTheme() === "dark" ? "light" : "dark"),
+    ":": show, "/": show,
+    "?": () => { show(); COMMANDS.help[1](); },
+  };
+  if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
+});
 
-async function typeCommand(cmd) {
-  const line = document.createElement("div");
-  line.innerHTML = `<span class="t-ps1">sepehr@london:~$</span> <span class="t-cmd"></span>`;
-  out.appendChild(line);
-  const span = line.querySelector(".t-cmd");
-  for (const ch of cmd) { span.textContent += ch; await sleep(reduceMotion ? 0 : 45 + Math.random() * 40); }
-  await sleep(reduceMotion ? 0 : 220);
-  const html = BOOT_OUT[cmd] || COMMANDS[cmd]();
-  print(null, html);
+// ------------------------------------------------------------------ figure 3: a token bucket, 5 per 10 seconds
+// Same behaviour as the limiter in github.com/sepehrvahedi/local-rate-limit: tokens return continuously,
+// one every two seconds, up to five.
+const MAX = 5, PER_SECOND = 5 / 10;
+const bucket = { tokens: MAX, at: performance.now() };
+const cells = [...document.querySelectorAll("#sim-bucket i")];
+const simLog = $("#sim-log"), simTokens = $("#sim-tokens");
+let started = null, served = 0, limited = 0;
+
+function refill(now) {
+  bucket.tokens = Math.min(MAX, bucket.tokens + ((now - bucket.at) / 1000) * PER_SECOND);
+  bucket.at = now;
 }
+function draw() {
+  refill(performance.now());
+  cells.forEach((cell, i) => cell.style.setProperty("--f", Math.max(0, Math.min(1, bucket.tokens - i)).toFixed(3)));
+  simTokens.textContent = `${Math.floor(bucket.tokens)} of ${MAX} tokens` + (limited ? ` · ${served} served, ${limited} limited` : "");
+  if (bucket.tokens < MAX) requestAnimationFrame(draw);
+}
+function send() {
+  const now = performance.now();
+  refill(now);
+  if (started === null) { started = now; simLog.textContent = ""; simLog.classList.add("live"); }
+  const ok = bucket.tokens >= 1;
+  const line = document.createElement("li");
+  const stamp = `<time>+${((now - started) / 1000).toFixed(1).padStart(5)}s</time>`;
+  if (ok) {
+    bucket.tokens -= 1; served += 1;
+    line.innerHTML = `${stamp} 200 OK`;
+  } else {
+    limited += 1;
+    line.className = "s429";
+    line.innerHTML = `${stamp} 429 Too Many Requests · retry in ${((1 - bucket.tokens) / PER_SECOND).toFixed(1)}s`;
+  }
+  simLog.append(line);
+  while (simLog.children.length > 5) simLog.firstChild.remove();
+  draw();
+}
+if ($("#sim-send")) { $("#sim-send").addEventListener("click", send); draw(); }
 
-(async function boot() {
-  input.disabled = true;
-  for (const c of BOOT) { await typeCommand(c); await sleep(reduceMotion ? 0 : 350); }
-  input.disabled = false;
-  if (window.matchMedia("(pointer: fine)").matches && window.scrollY < 40) input.focus({ preventScroll: true });
-})();
+// ------------------------------------------------------------------ colophon: what this page actually cost to load
+addEventListener("load", () => setTimeout(() => {
+  try {
+    const here = [performance.getEntriesByType("navigation")[0], ...performance.getEntriesByType("resource")]
+      .filter((r) => r && new URL(r.name, location.href).origin === location.origin);
+    const bytes = here.reduce((sum, r) => sum + (r.transferSize || r.encodedBodySize || 0), 0);
+    if (bytes > 0) $("#weight").textContent = `This visit: ${here.length} requests to this site, ${Math.round(bytes / 1024)} kB.`;
+  } catch (e) { /* older browsers: say nothing */ }
+}, 300));

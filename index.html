@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!--
+  Hello, source reader.
+
+  This page is written by hand: one HTML file, one stylesheet, one script, no framework and no build step.
+  It works with JavaScript switched off. The script only adds the command line (press ":"), the keyboard
+  navigation, the theme switch and the rate limiter in figure 3.
+
+  A plain-text CV lives next door:   curl -L https://sepehrvahedi.github.io/cv.txt
+-->
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sepehr Vahedi · Software Engineer</title>
-  <meta name="description" content="Sepehr Vahedi, software engineer in London. 3.5 years building backend, distributed systems and ML-serving infrastructure at a 10M+ user app. MSc Software Systems Engineering at UCL. Codeforces Candidate Master.">
+  <title>Sepehr Vahedi, software engineer</title>
+  <meta name="description" content="Sepehr Vahedi, software engineer in London. Backend, distributed systems and ML infrastructure. 3.5 years at a 10M+ user ride-hailing and delivery app, now an MSc at UCL. Codeforces Candidate Master.">
   <meta name="author" content="Sepehr Vahedi">
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="Sepehr Vahedi · Software Engineer">
-  <meta property="og:description" content="Backend, distributed systems and ML infrastructure. MSc @ UCL. Codeforces Candidate Master.">
+  <meta property="og:title" content="Sepehr Vahedi, software engineer">
+  <meta property="og:description" content="Backend, distributed systems and ML infrastructure. I make production systems measurably faster and prove they still give the same answers.">
   <meta property="og:url" content="https://sepehrvahedi.github.io/">
   <meta property="og:image" content="https://sepehrvahedi.github.io/assets/profile_picture.jpg">
-  <meta name="theme-color" content="#0b0e14">
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://sepehrvahedi.github.io/">
+  <link rel="alternate" type="text/plain" href="cv.txt" title="CV as plain text">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("theme");
-        if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", t);
-      } catch (e) {}
-    })();
+    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
   <script type="application/ld+json">
   {
@@ -44,314 +48,308 @@
   </script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#abstract">Skip to content</a>
 
-<header class="nav" id="top">
-  <div class="wrap nav-inner">
-    <a class="brand" href="#top" aria-label="Home"><span class="prompt">~/</span>sepehr<span class="cursor">_</span></a>
-    <nav aria-label="Sections">
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#about">about</a></li>
-        <li><a href="#experience">experience</a></li>
-        <li><a href="#research">research</a></li>
-        <li><a href="#projects">projects</a></li>
-        <li><a href="#stack">stack</a></li>
-        <li><a href="#achievements">achievements</a></li>
-        <li><a href="#contact">contact</a></li>
-      </ul>
-    </nav>
-    <div class="nav-actions">
-      <button class="icon-btn" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◐</button>
-      <a class="btn btn-small" href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" rel="noopener">cv.pdf</a>
-      <button class="icon-btn menu" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
-    </div>
+<header class="masthead">
+  <div class="front">
+    <p class="front-l">
+      <strong>Sepehr Vahedi</strong><br>
+      Software engineer<br>
+      Backend, distributed systems, ML infrastructure
+    </p>
+    <p class="front-r">
+      London, UK<br>
+      Available from September 2027<br>
+      <a href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a>
+    </p>
   </div>
+  <nav class="toc" aria-label="Sections">
+    <ol>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#open-source">Open source</a></li>
+      <li><a href="#also">Also</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+    <p class="tools">
+      <a href="assets/CV_Sepehr_Vahedi.pdf">cv.pdf</a>
+      <button type="button" id="theme" aria-label="Switch between light and dark">dark</button>
+      <button type="button" id="open-cmd" aria-label="Open the command line" title="Command line (press :)">:</button>
+    </p>
+  </nav>
 </header>
 
-<main id="main">
+<main>
 
-  <!-- HERO -->
-  <section class="hero wrap">
-    <div class="hero-text">
-      <p class="eyebrow">// software engineer · london</p>
-      <h1>Sepehr Vahedi</h1>
-      <p class="lead">I build backend and ML-serving systems that stay fast and correct under real traffic.
-        3.5 years at a <strong>10M+ user</strong> ride-hailing and delivery app, now doing an
-        <strong>MSc at UCL</strong>.</p>
-      <ul class="hero-stats" aria-label="Highlights">
-        <li><b>54x</b><span>model-server throughput</span></li>
-        <li><b>24%→19%</b><span>ETA error (MAPE)</span></li>
-        <li><b>2075</b><span>Codeforces max rating</span></li>
+<section id="abstract" aria-labelledby="h-abstract">
+  <h2 id="h-abstract" class="label"><span>§1</span> Abstract</h2>
+  <div class="body">
+    <h1>I make production systems measurably faster, and then prove they still give the same answers.</h1>
+    <figure class="portrait">
+      <img src="assets/portrait.jpg" alt="Sepehr Vahedi" width="120" height="120">
+    </figure>
+    <p>For 3.5 years I worked full-time at <b>Tapsi</b>, a ride-hailing and delivery app with more than ten million
+      monthly users, alongside my BSc at Sharif University of Technology. I was promoted to Senior Software Engineer
+      in January 2024. I owned services from design to code review and on-call.</p>
+    <p>I am now doing an <b>MSc in Software Systems Engineering at UCL</b>, building a patient-facing LLM agent
+      part-time at PillSorted, and looking for a software engineering role in the UK from
+      <mark>September 2027</mark>, on a Graduate visa with no sponsorship needed to start.</p>
+    <p class="aside">Away from work I am a <a href="https://codeforces.com/profile/Bruuh.">Candidate Master on Codeforces</a>
+      (max rating 2075).</p>
+  </div>
+</section>
+
+<section id="results" aria-labelledby="h-results">
+  <h2 id="h-results" class="label"><span>§2</span> Selected results</h2>
+  <div class="body">
+    <p>Five numbers, what changed to produce each one, and how I know it is real.</p>
+    <div class="scroll">
+    <table class="results">
+      <thead><tr><th>Result</th><th>What changed</th><th>How I know</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b class="n">54×</b> throughput</td>
+          <td>ETA model server at Tapsi: 70 → 3,800 requests/s per pod, and p50 latency at peak 866 → 62 ms. Removed a serialisation bottleneck in NVIDIA Triton and batched the sub-model calls.</td>
+          <td>Outputs identical on 19,200 replayed requests before it shipped.</td>
+        </tr>
+        <tr>
+          <td><b class="n">24 → 19%</b> ETA error</td>
+          <td>Took the delivery domain's first ML models to production on Triton, with accuracy gates in CI.</td>
+          <td>Six-city shadow run, then a switchback A/B test (MAPE).</td>
+        </tr>
+        <tr>
+          <td><b class="n">−45%</b> infrastructure cost</td>
+          <td>Rewrote the service behind every ride request from a Node.js monolith to Spring Boot and Project Reactor. Peak response time 200 → 80 ms.</td>
+          <td>Zero downtime during the switch.</td>
+        </tr>
+        <tr>
+          <td><b class="n">2×</b> daily deliveries</td>
+          <td>Built the event-sourced Kafka backend (1M+ events a day) that lets a customer run several delivery orders at once.</td>
+          <td>Measured after the multi-delivery launch.</td>
+        </tr>
+        <tr>
+          <td><b class="n">92.5%</b> branch coverage</td>
+          <td>TestCouncil, my BSc thesis: three different LLMs write unit tests for the same function and a synthesis step merges them.</td>
+          <td>135 functions; 36+ points of line coverage above the best single model, p &lt; 0.001.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <figure class="fig" id="fig-1">
+      <svg viewBox="0 0 640 150" role="img" aria-labelledby="fig1-title">
+        <title id="fig1-title">Requests per second per pod before and after: 70 and 3,800. Median latency at peak before and after: 866 and 62 milliseconds.</title>
+        <g class="axis"><line x1="150" y1="8" x2="150" y2="142"/></g>
+        <g class="t"><text x="140" y="27" text-anchor="end">before</text><text x="140" y="55" text-anchor="end">after</text></g>
+        <rect class="bar dim" x="150" y="15" width="8.8" height="16"/>
+        <rect class="bar" x="150" y="43" width="480" height="16"/>
+        <g class="v"><text x="166" y="27">70 req/s</text><text class="on" x="622" y="55" text-anchor="end">3,800 req/s per pod</text></g>
+        <g class="t"><text x="140" y="103" text-anchor="end">before</text><text x="140" y="131" text-anchor="end">after</text></g>
+        <rect class="bar dim" x="150" y="91" width="480" height="16"/>
+        <rect class="bar" x="150" y="119" width="34.4" height="16"/>
+        <g class="v"><text class="on" x="622" y="103" text-anchor="end">866 ms median at peak</text><text x="192" y="131">62 ms</text></g>
+      </svg>
+      <figcaption><b>Fig. 1.</b> The ETA model server before and after, drawn to scale. Top: throughput. Bottom: median latency at peak.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="experience" aria-labelledby="h-experience">
+  <h2 id="h-experience" class="label"><span>§3</span> Experience</h2>
+  <div class="body log">
+
+    <article>
+      <p class="when">Nov 2026 – now</p>
+      <h3>Software Engineer, part-time <span class="org">· <a href="https://pillsorted.com">PillSorted</a>, NHS online pharmacy, Cambridge</span></h3>
+      <ul>
+        <li>Sole engineer on Ask PillSorted, an iOS and Android chat that answers patients' questions from their own pharmacy records.</li>
+        <li>Designed its LLM agent on Amazon Bedrock: tools over MCP, rule-based guardrails, and retrieval that cites NHS sources.</li>
       </ul>
-      <div class="cta">
-        <a class="btn" href="#projects">./view-projects</a>
-        <a class="btn btn-ghost" href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" rel="noopener">download cv</a>
-        <a class="btn btn-ghost" href="mailto:sepehr.vahedi@gmail.com">email me</a>
-      </div>
-      <p class="availability"><span class="dot"></span>Open to software engineering roles from <b>September 2027</b> · UK Graduate visa</p>
-    </div>
+    </article>
 
-    <div class="terminal" role="region" aria-label="Interactive terminal">
-      <div class="term-bar">
-        <span class="lights"><i></i><i></i><i></i></span>
-        <span class="term-title">sepehr@london: ~</span>
-      </div>
-      <div class="term-body" id="term-body" tabindex="0">
-        <div id="term-output" aria-live="polite"></div>
-        <form id="term-form" class="term-line" autocomplete="off">
-          <label for="term-input" class="ps1">sepehr@london:~$</label>
-          <input id="term-input" type="text" spellcheck="false" aria-label="Terminal command (try: help)">
-        </form>
-      </div>
-    </div>
-  </section>
+    <article>
+      <p class="when">Dec 2025 – Sep 2026</p>
+      <h3>Senior Software Engineer, Delivery and Marketplace <span class="org">· Tapsi, Tehran</span></h3>
+      <ul>
+        <li>Designed and owned the delivery-routing gRPC service (Kotlin, Spring WebFlux) behind every motorcycle ETA and distance estimate, with an ML → OSRM → Haversine fallback chain. Moved five services off the old Go estimator with no regressions.</li>
+        <li>Raised ETA model-server throughput 54× and cut p50 latency at peak from 866 ms to 62 ms (figure 1).</li>
+        <li>Took the delivery domain's first ML models to production on NVIDIA Triton (KServe v2 gRPC, CI/CD with accuracy gates): ETA error fell from 24% to 19%.</li>
+        <li>Led these projects with a data scientist, owned code review and on-call for the routing stack, and was the onboarding mentor for a new engineer.</li>
+      </ul>
+    </article>
 
-  <!-- ABOUT -->
-  <section id="about" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> about</h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>I'm a software engineer focused on <strong>backend, distributed systems and ML infrastructure</strong>.
-          For 3.5 years I worked full-time at <strong>Tapsi</strong>, a ride-hailing and delivery super app with 10M+ monthly
-          active users, alongside my BSc at Sharif University of Technology. I was promoted to Senior Software Engineer in January 2024.</p>
-        <p>The work I enjoy most is making production systems measurably faster and safer to change: tracing a bottleneck,
-          fixing it, and proving the outputs did not change before shipping. I owned services end to end, from design
-          to code review and on-call.</p>
-        <p>I'm now doing an <strong>MSc in Software Systems Engineering at UCL</strong> and researching multi-agent LLM
-          systems for automated software testing. Away from work, I'm a <strong>Codeforces Candidate Master</strong>.</p>
-      </div>
-      <figure class="portrait">
-        <img src="assets/profile_picture.jpg" alt="Portrait of Sepehr Vahedi" width="1063" height="1063" loading="lazy">
-        <figcaption><code>status: shipping</code></figcaption>
+    <article>
+      <p class="when">Jan 2024 – Dec 2024</p>
+      <h3>Senior Software Engineer <span class="org">· Tapsi</span></h3>
+      <ul>
+        <li>Built the event-sourced Kafka backend (1M+ events a day) for multi-delivery orders. The launch doubled daily deliveries.</li>
+        <li>Rewrote the ride-request service, which manages the lifecycle of every ride request, from Node.js to Spring Boot and Project Reactor with zero downtime: 45% lower infrastructure cost.</li>
+      </ul>
+    </article>
+
+    <article>
+      <p class="when">Feb 2022 – Dec 2023</p>
+      <h3>Software Engineer <span class="org">· Tapsi, co-op then full-time alongside my BSc</span></h3>
+      <ul>
+        <li>Built the backend for a new business line, Iran's first school-transport platform (2,000+ drivers, 12,000+ students), as one of two backend engineers on a six-week deadline.</li>
+        <li>Cut GPS-service load 67% with adaptive driver GPS intervals, caching and filtering, and rewrote reverse geocoding in Go.</li>
+        <li>Built a mesh-level rate limiter on my own initiative. Every service exposed to external clients adopted it (figure 3).</li>
+      </ul>
+    </article>
+
+    <article>
+      <p class="when">Feb 2020 – Feb 2021</p>
+      <h3>Co-founder and product designer <span class="org">· RabinCash, crypto exchange, Tehran</span></h3>
+      <ul>
+        <li>Owned product and UX design for an exchange with 20+ trading pairs, and led the two-person front-end team.</li>
+      </ul>
+    </article>
+
+  </div>
+</section>
+
+<section id="research" aria-labelledby="h-research">
+  <h2 id="h-research" class="label"><span>§4</span> Research</h2>
+  <div class="body log">
+
+    <article>
+      <p class="when">2025 – 2026</p>
+      <h3><a href="https://github.com/sepehrvahedi/testgen-council">TestCouncil</a>: multi-agent LLM unit-test generation <span class="org">· BSc thesis, Software Quality Research Lab, Sharif</span></h3>
+      <p>Qwen, DeepSeek and Gemini write tests for the same function in parallel; an LLM synthesis step merges
+        them and removes about 85% of the tests as redundant. The finding I did not expect: giving the models
+        personas made no significant difference. Using <em>different</em> models did.</p>
+      <figure class="fig" id="fig-2">
+        <svg viewBox="0 0 640 176" role="img" aria-labelledby="fig2-title">
+          <title id="fig2-title">Average line coverage: Qwen alone 43.0%, DeepSeek alone 38.6%, Gemini alone 49.0%, council without roles 84.9%, council with roles 84.6%.</title>
+          <g class="axis"><line x1="150" y1="8" x2="150" y2="150"/><line class="grid" x1="390" y1="8" x2="390" y2="150"/><line class="grid" x1="630" y1="8" x2="630" y2="150"/></g>
+          <g class="t">
+            <text x="140" y="27" text-anchor="end">Qwen alone</text><text x="140" y="55" text-anchor="end">DeepSeek alone</text>
+            <text x="140" y="83" text-anchor="end">Gemini alone</text><text x="140" y="111" text-anchor="end">council</text>
+            <text x="140" y="139" text-anchor="end">council + roles</text>
+            <text x="150" y="168" text-anchor="middle">0</text><text x="390" y="168" text-anchor="middle">50</text><text x="630" y="168" text-anchor="middle">100%</text>
+          </g>
+          <rect class="bar dim" x="150" y="15" width="206.4" height="16"/>
+          <rect class="bar dim" x="150" y="43" width="185.3" height="16"/>
+          <rect class="bar dim" x="150" y="71" width="235.2" height="16"/>
+          <rect class="bar" x="150" y="99" width="407.5" height="16"/>
+          <rect class="bar" x="150" y="127" width="406.1" height="16"/>
+          <g class="v">
+            <text x="364" y="27">43.0</text><text x="343" y="55">38.6</text><text x="393" y="83">49.0</text>
+            <text x="565" y="111">84.9</text><text x="564" y="139">84.6</text>
+          </g>
+        </svg>
+        <figcaption><b>Fig. 2.</b> Average line coverage over 135 functions from HumanEval, MBPP and TheAlgorithms. Supervisor: Prof. Seyed-Hassan Mirian-Hosseinabadi.</figcaption>
       </figure>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section id="experience" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> experience <span class="h-cmd">$ git log --oneline --career</span></h2>
-
-    <article class="commit">
-      <header>
-        <span class="sha">a3f9c21</span>
-        <h3>Senior Software Engineer · Delivery and Marketplace</h3>
-        <span class="when">Dec 2025 – Sep 2026</span>
-      </header>
-      <p class="org">Tapsi · ride-hailing and delivery super app, 10M+ monthly active users · Tehran</p>
-      <ul>
-        <li>Designed and owned the <b>delivery-routing</b> gRPC service (Kotlin, Spring WebFlux) behind every motorcycle ETA and distance estimate, with an ML → OSRM → Haversine fallback chain; migrated five services off the legacy Go estimator with no regressions.</li>
-        <li>Raised ETA model-server throughput <b>54x</b>, from 70 to 3,800 requests/sec per pod, and cut p50 latency at peak from 866&nbsp;ms to 62&nbsp;ms by removing a Triton serialisation bottleneck and batching sub-model calls; outputs verified identical on 19,200 requests.</li>
-        <li>Took the delivery domain's first ML models to production on NVIDIA Triton (KServe v2 gRPC, CI/CD with accuracy gates) and designed the six-city shadow and switchback A/B rollout: <b>ETA MAPE fell from 24% to 19%</b>.</li>
-        <li>Led these projects with a data scientist, owned code review and on-call for the routing stack, and was the sole onboarding mentor for a new engineer.</li>
-      </ul>
     </article>
 
-    <article class="commit">
-      <header>
-        <span class="sha">7be2d04</span>
-        <h3>Senior Software Engineer</h3>
-        <span class="when">Jan 2024 – Dec 2024</span>
-      </header>
-      <p class="org">Tapsi · promoted January 2024</p>
-      <ul>
-        <li>Built the event-sourced Kafka backend (1M+ events/day) for multi-delivery orders; the launch <b>doubled daily deliveries</b>.</li>
-        <li>Rewrote the ride-request service, which manages the lifecycle of every ride request, from a Node.js monolith to Spring Boot and Project Reactor with zero downtime, cutting its infrastructure cost <b>45%</b> and peak response time from 200&nbsp;ms to 80&nbsp;ms.</li>
-      </ul>
+    <article>
+      <p class="when">2025 – 2026</p>
+      <h3>LLM issue-title generation <span class="org">· Intelligent Software Engineering Lab, Sharif</span></h3>
+      <p>A learned selection step decides which parts of a GitHub issue an LLM actually needs in order to write a
+        good title: <mark>37.3% fewer input tokens</mark>, within 0.004 BERTScore of the GPT-4 baseline, on a
+        dataset of 2.6M+ issues. Supervisor: Prof. Abbas Heydarnoori.</p>
     </article>
 
-    <article class="commit">
-      <header>
-        <span class="sha">1c08e5a</span>
-        <h3>Software Engineer</h3>
-        <span class="when">Feb 2022 – Dec 2023</span>
-      </header>
-      <p class="org">Tapsi · co-op and full-time alongside my BSc</p>
-      <ul>
-        <li>Cut GPS-service load <b>67%</b> with adaptive driver GPS intervals, caching and filtering, and rewrote reverse geocoding in Go.</li>
-        <li>Built the backend for a new business line, Iran's first school-transport platform (<b>2,000+ drivers, 12,000+ students</b>), as one of two backend engineers on a 1.5-month deadline.</li>
-        <li>Built a mesh-level rate limiter on my own initiative (Envoy Lua filter on Istio), adopted by every microservice exposed to external clients.</li>
-      </ul>
+  </div>
+</section>
+
+<section id="open-source" aria-labelledby="h-open-source">
+  <h2 id="h-open-source" class="label"><span>§5</span> Open source</h2>
+  <div class="body log">
+
+    <article>
+      <p class="when">Envoy · Lua · Istio</p>
+      <h3><a href="https://github.com/sepehrvahedi/local-rate-limit">local-rate-limit</a></h3>
+      <p>Per-user, per-API rate limiting at the proxy, so no service has to implement it. A small Lua filter works
+        out who is calling; Envoy's token buckets do the rest. A clean re-implementation of the pattern I first
+        built at Tapsi, with integration tests against a real Envoy.</p>
+      <figure class="fig sim" id="fig-3">
+        <div class="sim-row">
+          <button type="button" id="sim-send">Send request</button>
+          <div class="bucket" id="sim-bucket" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <output id="sim-tokens" for="sim-send">5 of 5 tokens</output>
+        </div>
+        <ol class="sim-log" id="sim-log" aria-live="polite"><li class="hint">Click faster than one request every two seconds.</li></ol>
+        <noscript><p class="aside">This figure needs JavaScript. The algorithm is in the repository either way.</p></noscript>
+        <figcaption><b>Fig. 3</b> (interactive). A token bucket of 5 per 10 seconds: a burst of five, then one token back every two seconds. The same limit the repository's tests pin down.</figcaption>
+      </figure>
     </article>
 
-    <article class="commit">
-      <header>
-        <span class="sha">0e41b7f</span>
-        <h3>Co-Founder and Product Designer</h3>
-        <span class="when">Feb 2020 – Feb 2021</span>
-      </header>
-      <p class="org">RabinCash · P2P and B2P crypto exchange startup</p>
-      <ul>
-        <li>Owned product and UX design from concept to launch (20+ trading pairs) and led a two-person front-end team.</li>
-      </ul>
+    <article>
+      <p class="when">Python · no LLM needed</p>
+      <h3>grad-tracker</h3>
+      <p>Every UK graduate role in one list, ranked against your CV, running on your own laptop. I replaced its
+        first LLM scorer with a few hundred lines of rules: rank correlation 0.83 with the LLM's scores on a
+        290-role benchmark, in under a second, for nothing. Public release soon.</p>
     </article>
-  </section>
 
-  <!-- RESEARCH -->
-  <section id="research" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> research</h2>
-    <div class="cards two">
-      <article class="card">
-        <p class="card-meta">BSc thesis · Software Quality Research Lab, Sharif · 2025–2026</p>
-        <h3><a href="https://github.com/sepehrvahedi/testgen-council" target="_blank" rel="noopener">TestCouncil</a></h3>
-        <p>Multi-agent LLM unit-test generation. Qwen, DeepSeek and Gemini agents write tests in parallel; an LLM synthesis step removes about 85% of redundant tests.</p>
-        <ul class="metrics">
-          <li><b>84.6%</b> line coverage</li>
-          <li><b>92.5%</b> branch coverage</li>
-          <li><b>36+ pts</b> over the best single model (p&nbsp;&lt;&nbsp;0.001)</li>
-        </ul>
-        <p class="muted small">135 functions from HumanEval, MBPP and an algorithms set. Ablations show model diversity, not role prompting, drives the gain. Supervisor: Prof. Seyed-Hassan Mirian-Hosseinabadi.</p>
-        <p class="tags"><span>Python</span><span>LLM agents</span><span>testing</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">Intelligent Software Engineering Lab, Sharif · 2025–2026</p>
-        <h3>LLM issue-title generation</h3>
-        <p>Learned context selection that decides which parts of a GitHub issue an LLM actually needs to write a good title.</p>
-        <ul class="metrics">
-          <li><b>37.3%</b> lower LLM input-token cost</li>
-          <li>within <b>0.004 BERTScore</b> of GPT-4</li>
-          <li><b>2.6M+</b> GitHub-issue dataset</li>
-        </ul>
-        <p class="muted small">Supervisor: Prof. Abbas Heydarnoori.</p>
-        <p class="tags"><span>NLP</span><span>LLM cost</span><span>deep learning</span></p>
-      </article>
-    </div>
-  </section>
+    <article>
+      <p class="when">Python · LLMs</p>
+      <h3><a href="https://github.com/sepehrvahedi/automatic-paper-critique">automatic-paper-critique</a></h3>
+      <p>Four LLMs critique a paper and rank each other's points in shuffled order, to cancel position bias. A Borda
+        count merges the rankings into one review.</p>
+    </article>
 
-  <!-- PROJECTS -->
-  <section id="projects" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> projects <span class="h-cmd">$ ls ~/projects</span></h2>
-    <div class="cards three">
-      <article class="card">
-        <p class="card-meta">infra · Tapsi, self-initiated</p>
-        <h3><a href="https://github.com/sepehrvahedi/local-rate-limit" target="_blank" rel="noopener">mesh-level rate limiter</a></h3>
-        <p>Per-user, per-API token-bucket limits as an Envoy Lua filter on Istio. Solved an open company-wide problem once instead of per team; part of my promotion case.</p>
-        <p class="tags"><span>Envoy</span><span>Istio</span><span>Lua</span><span>Kubernetes</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">LLM evaluation</p>
-        <h3><a href="https://github.com/sepehrvahedi/automatic-paper-critique" target="_blank" rel="noopener">multi-agent paper critique</a></h3>
-        <p>Four LLMs critique a paper and cross-rank each other's points in shuffled order to cancel position bias; a Borda count merges them into one ranked review.</p>
-        <p class="tags"><span>Python</span><span>LLMs</span><span>Borda count</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">client project · Air Properties, Dubai</p>
-        <h3>property data platform</h3>
-        <p>ETL for 10K+ listings with semantic search, and a RAG recommender serving 500+ queries/day with 40% faster property matching.</p>
-        <p class="tags"><span>RAG</span><span>ETL</span><span>semantic search</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">full stack</p>
-        <h3><a href="https://github.com/sepehrvahedi/VenueBooker" target="_blank" rel="noopener">VenueBooker</a></h3>
-        <p>Venue booking and management for events: customer search and booking, plus an owner dashboard for calendars and requests.</p>
-        <p class="tags"><span>Kotlin</span><span>Spring Boot</span><span>MongoDB</span><span>Redis</span><span>Kafka</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">compilers</p>
-        <h3><a href="https://github.com/sepehrvahedi/Compiler-C-Minus" target="_blank" rel="noopener">C-Minus compiler</a></h3>
-        <p>A multi-phase compiler for C-Minus, a subset of C. Phase 1, the scanner with error handling and a symbol table, is complete.</p>
-        <p class="tags"><span>Python</span><span>lexical analysis</span></p>
-      </article>
-      <article class="card">
-        <p class="card-meta">tooling</p>
-        <h3><a href="https://github.com/sepehrvahedi/locale-translator" target="_blank" rel="noopener">locale-translator</a></h3>
-        <p>Scans a codebase, extracts user-facing text and generates translations concurrently, with rate limiting to stay inside API quotas.</p>
-        <p class="tags"><span>Node.js</span><span>concurrency</span></p>
-      </article>
-    </div>
-    <p class="more"><a href="https://github.com/sepehrvahedi?tab=repositories" target="_blank" rel="noopener">→ all repositories on GitHub</a></p>
-  </section>
+    <p class="more"><a href="https://github.com/sepehrvahedi?tab=repositories">All repositories</a>, including a C-Minus compiler front end and a venue-booking platform on Spring Boot and Kafka.</p>
+  </div>
+</section>
 
-  <!-- STACK -->
-  <section id="stack" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> stack <span class="h-cmd">$ cat stack.kt</span></h2>
-    <pre class="code" aria-label="Technical skills"><code><span class="k">data class</span> <span class="t">Stack</span>(
-  <span class="p">languages</span>      = <span class="f">listOf</span>(
-      <span class="s">"Kotlin"</span>, <span class="s">"Java"</span>, <span class="s">"Python"</span>, <span class="s">"Go"</span>, <span class="s">"C++"</span>, <span class="s">"TypeScript"</span>,
-      <span class="s">"JavaScript (Node.js)"</span>, <span class="s">"SQL"</span>,
-  ),
-  <span class="p">backend</span>        = <span class="f">listOf</span>(
-      <span class="s">"Spring Boot"</span>, <span class="s">"Project Reactor (WebFlux)"</span>, <span class="s">"gRPC"</span>,
-      <span class="s">"REST"</span>, <span class="s">"Apache Kafka"</span>, <span class="s">"event-driven microservices"</span>,
-  ),
-  <span class="p">mlServing</span>      = <span class="f">listOf</span>(
-      <span class="s">"NVIDIA Triton"</span>, <span class="s">"KServe v2"</span>, <span class="s">"ONNX"</span>, <span class="s">"PyTorch"</span>,
-      <span class="s">"Hugging Face Transformers"</span>, <span class="s">"LLM APIs"</span>,
-  ),
-  <span class="p">infrastructure</span> = <span class="f">listOf</span>(
-      <span class="s">"Kubernetes"</span>, <span class="s">"Docker"</span>, <span class="s">"Helm"</span>, <span class="s">"ArgoCD"</span>, <span class="s">"GitLab CI/CD"</span>,
-      <span class="s">"Istio"</span>, <span class="s">"Envoy"</span>, <span class="s">"Prometheus"</span>, <span class="s">"Grafana"</span>,
-  ),
-  <span class="p">data</span>           = <span class="f">listOf</span>(
-      <span class="s">"PostgreSQL"</span>, <span class="s">"MongoDB"</span>, <span class="s">"Redis"</span>, <span class="s">"Hazelcast"</span>, <span class="s">"Uber H3"</span>,
-      <span class="s">"OSRM"</span>,
-  ),
-  <span class="p">testing</span>        = <span class="f">listOf</span>(<span class="s">"JUnit"</span>, <span class="s">"Mockito"</span>, <span class="s">"shadow testing"</span>, <span class="s">"switchback A/B"</span>),
-  <span class="p">spoken</span>         = <span class="f">listOf</span>(
-      <span class="s">"English (IELTS 8.0)"</span>, <span class="s">"German (intermediate)"</span>,
-      <span class="s">"Persian (native)"</span>,
-  ),
-)</code></pre>
-  </section>
+<section id="also" aria-labelledby="h-also">
+  <h2 id="h-also" class="label"><span>§6</span> Also</h2>
+  <div class="body">
+    <dl class="facts">
+      <dt>Competitive programming</dt>
+      <dd><a href="https://codeforces.com/profile/Bruuh.">Codeforces Candidate Master</a>, max 2075 (top 1.5%); Expert on an <a href="https://codeforces.com/profile/Bation_King">earlier account</a>; 420+ problems. Iran National Olympiad in Informatics, top-50 finalist in 2018 and 2019. Third of 65 teams at the AUT programming contest.</dd>
+      <dt>Teaching</dt>
+      <dd>Taught informatics olympiad students at NODET; they won one gold and two silver national medals. Teaching assistant for Advanced Programming and for Scientific and Technical Presentation at Sharif.</dd>
+      <dt>Education</dt>
+      <dd>MSc Software Systems Engineering, University College London, 2026 – 2027. BSc Computer Engineering, Sharif University of Technology, 2020 – 2026: 18.25/20 over the final two years, six years in total because I worked full-time for most of them.</dd>
+      <dt>Languages</dt>
+      <dd>Kotlin, Java, Python, TypeScript, Go, C++, C#, Swift.</dd>
+      <dt>Backend</dt>
+      <dd>Spring Boot, Project Reactor, gRPC, REST, Kafka, event-driven microservices, JUnit, Mockito.</dd>
+      <dt>ML and LLM systems</dt>
+      <dd>NVIDIA Triton, KServe v2, ONNX, PyTorch, Amazon Bedrock, MCP, RAG, agents.</dd>
+      <dt>Infrastructure</dt>
+      <dd>Kubernetes, Docker, Helm, ArgoCD, GitLab CI/CD, Istio, Envoy, Terraform, AWS, Prometheus, Grafana.</dd>
+      <dt>Data</dt>
+      <dd>PostgreSQL, pgvector, MongoDB, Redis, Hazelcast, Uber H3, OSRM.</dd>
+      <dt>Spoken</dt>
+      <dd>English (IELTS 8.0), Persian (native), German (intermediate).</dd>
+    </dl>
+  </div>
+</section>
 
-  <!-- ACHIEVEMENTS -->
-  <section id="achievements" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> achievements &amp; teaching</h2>
-    <div class="cards three compact">
-      <article class="card accent">
-        <p class="big">2075</p>
-        <h3><a href="https://codeforces.com/profile/Bruuh." target="_blank" rel="noopener">Codeforces Candidate Master</a></h3>
-        <p>Top 1.5% worldwide. Expert (max 1765) on my <a href="https://codeforces.com/profile/Bation_King" target="_blank" rel="noopener">earlier account</a>; 420+ problems solved.</p>
-      </article>
-      <article class="card">
-        <p class="big">Top 50</p>
-        <h3>Iran National Olympiad in Informatics</h3>
-        <p>National finalist in 2018 and 2019. 3rd of 65 teams at the AUT International Programming Contest.</p>
-      </article>
-      <article class="card">
-        <p class="big">1 🥇 2 🥈</p>
-        <h3>Olympiad teacher &amp; TA</h3>
-        <p>Taught informatics olympiad students at NODET (2020–21); they won one gold and two silver INOI medals. TA for Advanced Programming and Scientific and Technical Presentation at Sharif.</p>
-      </article>
-    </div>
-  </section>
+<section id="contact" aria-labelledby="h-contact">
+  <h2 id="h-contact" class="label"><span>§7</span> Contact</h2>
+  <div class="body">
+    <p class="lede">Hiring for backend, infrastructure or ML-platform engineering from September 2027? I would like to hear about it.</p>
+    <p class="links">
+      <a href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a>
+      <a href="https://www.linkedin.com/in/sepehr-vahedi-8a8216216/">LinkedIn</a>
+      <a href="https://github.com/sepehrvahedi">GitHub</a>
+      <a href="https://codeforces.com/profile/Bruuh.">Codeforces</a>
+    </p>
+    <p>CV: <a href="assets/CV_Sepehr_Vahedi.pdf">backend version</a>, <a href="assets/CV_Sepehr_Vahedi_ML.pdf">ML-platform version</a>, or <a href="cv.txt">plain text</a>.</p>
+  </div>
+</section>
 
-  <!-- EDUCATION -->
-  <section id="education" class="section wrap">
-    <h2 class="h"><span class="hash">#</span> education</h2>
-    <div class="edu">
-      <div class="edu-row">
-        <div><h3>MSc Software Systems Engineering</h3><p>University College London (UCL)</p>
-          <p class="muted small">Software Architecture · Validation and Verification · Security and Privacy of AI · Financial Institutions and Markets · Industrial Group Project</p></div>
-        <span class="when">Sep 2026 – Sep 2027</span>
-      </div>
-      <div class="edu-row">
-        <div><h3>BSc Computer Engineering (Software Engineering)</h3><p>Sharif University of Technology</p>
-          <p class="muted small">GPA 16.71/20, 18.25/20 in the final two years. Extended to six years by co-op and full-time work at Tapsi.</p></div>
-        <span class="when">Sep 2020 – Jul 2026</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="section wrap contact">
-    <h2 class="h"><span class="hash">#</span> contact</h2>
-    <p class="lead">Hiring for backend, infrastructure or ML-platform engineering from September 2027? I'd like to hear about it.</p>
-    <div class="contact-links">
-      <a class="btn" href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/sepehr-vahedi-8a8216216/" target="_blank" rel="noopener">linkedin</a>
-      <a class="btn btn-ghost" href="https://github.com/sepehrvahedi" target="_blank" rel="noopener">github</a>
-      <a class="btn btn-ghost" href="https://codeforces.com/profile/Bruuh." target="_blank" rel="noopener">codeforces</a>
-    </div>
-    <p class="muted small">CV: <a href="assets/CV_Sepehr_Vahedi.pdf" target="_blank" rel="noopener">backend version</a> · <a href="assets/CV_Sepehr_Vahedi_ML.pdf" target="_blank" rel="noopener">ML-platform version</a></p>
-  </section>
 </main>
 
-<footer class="footer">
-  <div class="wrap">
-    <p><span class="prompt">$</span> echo "© 2026 Sepehr Vahedi · hand-written HTML, CSS and JS, no frameworks · updated Oct 2026"</p>
-  </div>
+<footer class="colophon">
+  <p><b>Colophon.</b> Written by hand in HTML, CSS and JavaScript: no framework, no build step, no tracking. Set in Newsreader and IBM Plex Mono.
+    <span id="weight"></span></p>
+  <p class="keys">Keys: <kbd>j</kbd> <kbd>k</kbd> next and previous section · <kbd>:</kbd> command line · <kbd>t</kbd> theme · <kbd>?</kbd> help</p>
+  <p><code>$ curl -L sepehrvahedi.github.io/cv.txt</code> · Updated November 2026 · © Sepehr Vahedi</p>
 </footer>
 
-<script src="js/main.js"></script>
+<form class="cmd" id="cmd" hidden autocomplete="off">
+  <p class="cmd-out" id="cmd-out" role="status"></p>
+  <label><span aria-hidden="true">:</span><input id="cmd-in" type="text" spellcheck="false" autocapitalize="off" aria-label="Command" placeholder="help"></label>
+</form>
+
+<script src="js/main.js" defer></script>
 </body>
 </html>
