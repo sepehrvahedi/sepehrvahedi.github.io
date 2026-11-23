@@ -4,11 +4,11 @@ Personal site of **Sepehr Vahedi**, software engineer (backend, distributed syst
 
 Live: https://sepehrvahedi.github.io
 
-It is a typeset document rather than a landing page: serif for reading, mono for data, numbers that are drawn
-to scale.
+Quiet surfaces, big type, one accent colour, and real work instead of decoration: charts drawn to scale,
+product screenshots and a working token-bucket rate limiter. The design rules are written at the top of
+`css/style.css`.
 
-- Hand-written HTML, CSS and JavaScript. No framework, no build step, no tracking. Works with JavaScript off.
-- Three figures drawn in SVG from real numbers; figure 3 is a working token-bucket rate limiter.
+- Hand-written HTML, CSS and JavaScript. No framework, no build step, no web fonts, no tracking. Works with JavaScript off.
 - A command line (press `:`), `j` / `k` to move between sections, `t` for the theme, `?` for help.
 - Light and dark themes, phone widths, a print stylesheet that turns the page into a CV.
 - The CV as plain text: `curl -L https://sepehrvahedi.github.io/cv.txt`

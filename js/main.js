@@ -1,9 +1,25 @@
-// Everything on the page works without this file. It adds: the theme switch, keyboard navigation,
-// a small command line (press ":"), the token bucket in figure 3, and the page weight in the colophon.
+// Everything on the page works without this file. It adds: the charts drawing in, the theme switch,
+// a small command line (press ":"), keyboard navigation, the token-bucket demo and the page weight in the footer.
 "use strict";
 
 const $ = (s) => document.querySelector(s);
 const sections = [...document.querySelectorAll("main section")];
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ------------------------------------------------------------------ charts draw their bars once, when first seen
+const charts = [...document.querySelectorAll(".chart")];
+if ("IntersectionObserver" in window && !reduceMotion) {
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add("drawn");
+      io.unobserve(e.target);
+    }
+  }, { threshold: 0.3 });
+  charts.forEach((el) => io.observe(el));
+} else {
+  charts.forEach((el) => el.classList.add("drawn"));
+}
 
 // ------------------------------------------------------------------ theme
 const root = document.documentElement;
@@ -12,39 +28,38 @@ const currentTheme = () => root.dataset.theme || (systemDark() ? "dark" : "light
 function setTheme(theme) {
   root.dataset.theme = theme;
   try { localStorage.setItem("theme", theme); } catch (e) { /* private mode */ }
-  $("#theme").textContent = theme === "dark" ? "light" : "dark";     // the button names where it takes you
 }
-$("#theme").textContent = currentTheme() === "dark" ? "light" : "dark";
 $("#theme").addEventListener("click", () => setTheme(currentTheme() === "dark" ? "light" : "dark"));
 
-// ------------------------------------------------------------------ where am I: mark the current section in the contents
-const tocLinks = new Map([...document.querySelectorAll(".toc li a")].map((a) => [a.getAttribute("href").slice(1), a]));
+// ------------------------------------------------------------------ mark the current section in the nav
+const navLinks = new Map([...document.querySelectorAll(".nav-links a")].map((a) => [a.getAttribute("href").slice(1), a]));
 let current = 0;
-const spy = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
-  for (const e of entries) {
-    if (!e.isIntersecting) continue;
-    current = sections.indexOf(e.target);
-    for (const [id, a] of tocLinks) a.toggleAttribute("aria-current", id === e.target.id);
-  }
-}, { rootMargin: "-20% 0px -70% 0px" }) : null;
-if (spy) sections.forEach((s) => spy.observe(s));
-
+if ("IntersectionObserver" in window) {
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      current = sections.indexOf(e.target);
+      for (const [id, a] of navLinks) a.toggleAttribute("aria-current", id === e.target.id);
+    }
+  }, { rootMargin: "-30% 0px -60% 0px" });
+  sections.forEach((s) => spy.observe(s));
+}
 function go(index) {
   current = Math.max(0, Math.min(sections.length - 1, index));
   sections[current].scrollIntoView({ block: "start" });
-  history.replaceState(null, "", "#" + sections[current].id);
 }
 
 // ------------------------------------------------------------------ command line
 const cmd = $("#cmd"), input = $("#cmd-in"), out = $("#cmd-out");
 const open = (url) => { window.location.href = url; };
 const esc = (text) => String(text).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const ids = sections.map((s) => s.id).filter(Boolean);
 const COMMANDS = {
   help: ["this list", () => say(Object.entries(COMMANDS).map(([k, [text]]) => `<b>${k.padEnd(9)}</b> ${esc(text)}`).join("\n"), true)],
-  goto: ["goto NAME: abstract, results, experience, research, open-source, also, contact", (arg) => {
-    const i = sections.findIndex((s) => s.id.startsWith((arg || "").toLowerCase()));
-    if (!arg || i < 0) return say("goto where? " + sections.map((s) => s.id).join(", "), true);
-    go(i); close();
+  goto: ["goto NAME: " + ids.join(", "), (arg) => {
+    const el = arg && document.getElementById(ids.find((id) => id.startsWith(arg.toLowerCase())) || "");
+    if (!el) return say("goto where? " + ids.join(", "), true);
+    el.scrollIntoView({ block: "start" }); close();
   }],
   cv: ["open the CV (pdf)", () => open("assets/CV_Sepehr_Vahedi.pdf")],
   txt: ["open the CV as plain text", () => open("cv.txt")],
@@ -57,19 +72,10 @@ const COMMANDS = {
   print: ["print this page as a CV", () => { close(); window.print(); }],
   q: ["close this line", () => close()],
 };
-function say(text, keepOpen) {
-  out.innerHTML = text;
-  if (!keepOpen) setTimeout(close, 1600);
-}
-function show() {
-  cmd.hidden = false; out.textContent = ""; input.value = ""; input.focus();
-}
-function close() {
-  cmd.hidden = true; input.blur();
-}
-function complete(prefix) {
-  return Object.keys(COMMANDS).filter((k) => k.startsWith(prefix));
-}
+function say(html, keepOpen) { out.innerHTML = html; if (!keepOpen) setTimeout(close, 1600); }
+function show() { cmd.hidden = false; out.textContent = ""; input.value = ""; input.focus(); }
+function close() { cmd.hidden = true; input.blur(); }
+const complete = (prefix) => Object.keys(COMMANDS).filter((k) => k.startsWith(prefix));
 cmd.addEventListener("submit", (e) => {
   e.preventDefault();
   const [name, ...rest] = input.value.trim().replace(/^:/, "").split(/\s+/);
@@ -91,14 +97,11 @@ input.addEventListener("keydown", (e) => {
 $("#open-cmd").addEventListener("click", () => (cmd.hidden ? show() : close()));
 
 // ------------------------------------------------------------------ keys
-let lastG = 0;
 document.addEventListener("keydown", (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(e.target.tagName)) return;
   const keys = {
     j: () => go(current + 1), k: () => go(current - 1),
-    G: () => go(sections.length - 1),
-    g: () => { if (Date.now() - lastG < 500) { window.scrollTo({ top: 0 }); current = 0; } lastG = Date.now(); },
     t: () => setTheme(currentTheme() === "dark" ? "light" : "dark"),
     ":": show, "/": show,
     "?": () => { show(); COMMANDS.help[1](); },
@@ -106,7 +109,7 @@ document.addEventListener("keydown", (e) => {
   if (keys[e.key]) { e.preventDefault(); keys[e.key](); }
 });
 
-// ------------------------------------------------------------------ figure 3: a token bucket, 5 per 10 seconds
+// ------------------------------------------------------------------ token bucket, 5 per 10 seconds
 // Same behaviour as the limiter in github.com/sepehrvahedi/local-rate-limit: tokens return continuously,
 // one every two seconds, up to five.
 const MAX = 5, PER_SECOND = 5 / 10;
@@ -128,17 +131,14 @@ function draw() {
 function send() {
   const now = performance.now();
   refill(now);
-  if (started === null) { started = now; simLog.textContent = ""; simLog.classList.add("live"); }
+  if (started === null) { started = now; simLog.textContent = ""; }
   const ok = bucket.tokens >= 1;
   const line = document.createElement("li");
-  const stamp = `<time>+${((now - started) / 1000).toFixed(1).padStart(5)}s</time>`;
-  if (ok) {
-    bucket.tokens -= 1; served += 1;
-    line.innerHTML = `${stamp} 200 OK`;
-  } else {
-    limited += 1;
-    line.className = "s429";
-    line.innerHTML = `${stamp} 429 Too Many Requests · retry in ${((1 - bucket.tokens) / PER_SECOND).toFixed(1)}s`;
+  const stamp = `<time>+${((now - started) / 1000).toFixed(1)}s</time>`;
+  if (ok) { bucket.tokens -= 1; served += 1; line.innerHTML = `${stamp}200 OK`; }
+  else {
+    limited += 1; line.className = "s429";
+    line.innerHTML = `${stamp}429 Too Many Requests · retry in ${((1 - bucket.tokens) / PER_SECOND).toFixed(1)}s`;
   }
   simLog.append(line);
   while (simLog.children.length > 5) simLog.firstChild.remove();
@@ -146,7 +146,7 @@ function send() {
 }
 if ($("#sim-send")) { $("#sim-send").addEventListener("click", send); draw(); }
 
-// ------------------------------------------------------------------ colophon: what this page actually cost to load
+// ------------------------------------------------------------------ footer: what this page cost to load
 addEventListener("load", () => setTimeout(() => {
   try {
     const here = [performance.getEntriesByType("navigation")[0], ...performance.getEntriesByType("resource")]
