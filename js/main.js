@@ -47,7 +47,6 @@ const COMMANDS = {
     go(i); close();
   }],
   cv: ["open the CV (pdf)", () => open("assets/CV_Sepehr_Vahedi.pdf")],
-  "ml-cv": ["open the ML-platform CV (pdf)", () => open("assets/CV_Sepehr_Vahedi_ML.pdf")],
   txt: ["open the CV as plain text", () => open("cv.txt")],
   email: ["write to me", () => open("mailto:sepehr.vahedi@gmail.com")],
   github: ["github.com/sepehrvahedi", () => open("https://github.com/sepehrvahedi")],

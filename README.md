@@ -12,6 +12,6 @@ to scale.
 - A command line (press `:`), `j` / `k` to move between sections, `t` for the theme, `?` for help.
 - Light and dark themes, phone widths, a print stylesheet that turns the page into a CV.
 - The CV as plain text: `curl -L https://sepehrvahedi.github.io/cv.txt`
-- CVs as PDF: [`backend`](assets/CV_Sepehr_Vahedi.pdf) and [`ML platform`](assets/CV_Sepehr_Vahedi_ML.pdf).
+- The CV as PDF: [`CV_Sepehr_Vahedi.pdf`](assets/CV_Sepehr_Vahedi.pdf).
 
 Run locally: `python3 -m http.server`, then open http://localhost:8000.
