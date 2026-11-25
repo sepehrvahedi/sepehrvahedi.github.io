@@ -12,8 +12,8 @@ Every moving thing on the page is a small working program, not decoration:
   every second with London time, and a digital clock and the date sit in the sky beside it.
 - **The road** (laptops): after the landing, a pinned sentence lights up word by word, then a road winds from
   2018 to London through each stop, study on the left and work on the right. It draws itself as you scroll, a small
-  Tapsi-orange car drives along it, and each stop opens in place with its story and live demo. Phones keep a
-  single-column page.
+  Tapsi-orange car drives along it, and each stop opens in place with its story and live demo. On phones the road
+  becomes a rail down the left edge, with the stops in one column beside it.
 - **The city** is a random road graph. Tap it and Dijkstra's algorithm runs from your pin; the first free car the
   search reaches, by road, gets the ride. The readout compares the road distance with the straight line.
 - **54×** runs two lanes at 70 and 3,800 requests a second, the before and after of a model server I sped up.

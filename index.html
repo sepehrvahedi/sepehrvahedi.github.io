@@ -31,7 +31,7 @@
   <link rel="preload" as="image" href="assets/img/portrait-london.jpg" media="(min-width: 735px)">
   <link rel="preload" as="image" href="assets/img/portrait-london-tall.jpg" media="(max-width: 734px)">
   <link rel="stylesheet" media="(hover: hover) and (pointer: fine) and (min-width: 961px)" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20261126i">
+  <link rel="stylesheet" href="css/style.css?v=20261127c">
   <script>
     document.documentElement.classList.add("js");
   </script>
@@ -108,7 +108,7 @@
   </div>
 </section>
 
-<section class="dark story d-only" id="journey" aria-labelledby="h-story">
+<section class="dark story" id="journey" aria-labelledby="h-story">
   <div class="hook-track">
     <div class="hook">
       <p class="hook-kicker">2018 to 2027</p>
@@ -284,244 +284,7 @@
   </div>
 </section>
 
-<!-- phones keep the earlier single-column page -->
-<section class="city-section dark m-only" id="city-m" aria-labelledby="h-city-m">
-  <div class="wrap">
-    <p class="kicker">Tapsi · ride-hailing and delivery · 10M+ monthly users</p>
-    <h2 id="h-city-m" class="title">Tap the city to call a car.</h2>
-    <div class="city-grid">
-      <div class="city-frame">
-        <canvas class="city-canvas" id="city-canvas-m" aria-label="A small city map with cars. Tapping it places a ride request and the nearest car by road drives to it."></canvas>
-        <p class="city-readout mono" id="city-readout-m" aria-live="polite">Searching the road graph from your tap. Nearest car by road, not by distance.</p>
-      </div>
-      <div class="city-copy">
-        <p class="copy">Every tap runs Dijkstra's algorithm from your pin across the road graph, and the first car it reaches gets the ride. The blue spread is the search. The straight-line distance is shown too, because it is always shorter and usually wrong.</p>
-        <p class="copy">At Tapsi I designed the Kotlin gRPC service behind every delivery estimate: an ML model first, falling back to road routing (OSRM), then a straight line. I owned it in production and moved five services onto it. With a data scientist, I took the team's first ML models live: estimate error fell from <strong>24% to 19%</strong>.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="feature m-only" aria-labelledby="h-fast-m">
-  <div class="wrap">
-    <p class="kicker">Tapsi · ETA model server · 2026</p>
-    <h2 id="h-fast-m" class="huge">54×</h2>
-    <p class="feature-copy">Every delivery estimate went through one model server. I found a serialisation bottleneck, removed it and batched the sub-model calls. Throughput per pod went from 70 to 3,800 requests a second; median latency at peak from 866 to 62&nbsp;ms. Before it shipped I replayed 19,200 real requests. Every output was identical.</p>
-    <figure class="flow" id="flow-m" aria-labelledby="flow-cap-m">
-      <div class="lane">
-        <p class="lane-label"><span>Before</span> 70 requests a second</p>
-        <canvas class="lane-canvas" data-rate="70" aria-hidden="true"></canvas>
-        <p class="lane-count mono"><output data-count="70">0</output> served</p>
-      </div>
-      <div class="lane">
-        <p class="lane-label"><span>After</span> 3,800 requests a second</p>
-        <canvas class="lane-canvas" data-rate="3800" aria-hidden="true"></canvas>
-        <p class="lane-count mono"><output data-count="3800">0</output> served</p>
-      </div>
-      <figcaption id="flow-cap-m">One pod each, since this came into view. The dots are slowed 20 times so you can see them; the counters run at the real rate.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section class="ledger-section m-only" aria-labelledby="h-results-m">
-  <div class="wrap">
-    <h2 id="h-results-m" class="title">Other results, and how I know they are real.</h2>
-    <table class="ledger">
-      <thead><tr><th scope="col">Result</th><th scope="col">What changed</th><th scope="col">Evidence</th></tr></thead>
-      <tbody>
-        <tr><td class="num">2×</td><td>Daily deliveries, after an event-sourced Kafka backend for multi-delivery orders, built in a team of three.</td><td>1M+ events a day; measured after launch.</td></tr>
-        <tr><td class="num">−45%</td><td>Infrastructure cost of the service behind every ride request, rewritten from Node.js to Kotlin.</td><td>Zero downtime during the switch; p95 latency at peak from 200 to 80&nbsp;ms.</td></tr>
-        <tr><td class="num">6 weeks</td><td>A new school-transport backend for 12,000+ students, built by two backend engineers using Agile.</td><td>Launched on time, before LLM coding assistants existed.</td></tr>
-        <tr><td class="num">84.6%</td><td>Line coverage from TestCouncil, my BSc thesis: three LLMs write unit tests together.</td><td>135 functions; the best single model reached 49%.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section class="m-only" id="work-m" aria-labelledby="h-work-m">
-  <div class="wrap">
-    <h2 id="h-work-m" class="title">Work</h2>
-
-    <article class="entry">
-      <div class="entry-head">
-        <h3><a href="https://pillsorted.com">PillSorted</a></h3>
-        <p class="entry-role">Software Engineer, part-time alongside the MSc</p>
-        <p class="entry-meta">NHS online delivery pharmacy, Cambridge · Nov 2026 to now</p>
-      </div>
-      <ul class="entry-body">
-        <li>Sole engineer building Ask PillSorted, an iOS and Android chat that answers patients' questions from their own pharmacy records.</li>
-        <li>An LLM agent on Amazon Bedrock, with tools over MCP, rule-based guardrails and retrieval that cites NHS sources.</li>
-      </ul>
-    </article>
-
-    <article class="entry">
-      <div class="entry-head">
-        <h3>Tapsi</h3>
-        <p class="entry-role">Senior Software Engineer, Delivery team</p>
-        <p class="entry-meta">Ride-hailing and delivery, 10M+ monthly users, Tehran · Dec 2025 to Sep 2026</p>
-      </div>
-      <ul class="entry-body">
-        <li>Designed the Kotlin gRPC service behind every delivery ETA: an ML model, falling back to OSRM road routing, then straight-line distance. Owned its code review, monitoring and on-call, and led the migration of five services onto it.</li>
-        <li>Raised model-server throughput 54× and cut median latency at peak from 866 to 62&nbsp;ms.</li>
-        <li>Led the production rollout of the team's first ML models with a data scientist: six-city shadow runs, switchback tests and a CI gate against less accurate models. ETA error fell from 24% to 19%.</li>
-      </ul>
-    </article>
-
-    <article class="entry">
-      <div class="entry-head">
-        <h3>Tapsi</h3>
-        <p class="entry-role">Software Engineer, promoted to Senior in January 2024</p>
-        <p class="entry-meta">Co-op placement, then alongside my BSc · Feb 2022 to Dec 2024</p>
-      </div>
-      <ul class="entry-body">
-        <li>Co-developed, in a team of three, the event-sourced Kafka backend (MongoDB, Redis) that lets customers run several deliveries at once. Daily deliveries doubled after launch.</li>
-        <li>Planned and ran a zero-downtime rewrite of the ride-request service from Node.js to Kotlin (Spring Boot, Project Reactor): 45% lower infrastructure cost.</li>
-        <li>Delivered a new school-transport backend for 12,000+ students in six weeks with one other backend engineer, coordinating the whole project with Agile.</li>
-        <li>Cut GPS-service pods 67% with adaptive GPS intervals, caching and filtering, and rewrote reverse geocoding in Go.</li>
-        <li>On my own initiative, built a per-user, per-API rate limiter as an Envoy Lua filter on Istio. Every public-facing service adopted it.</li>
-      </ul>
-    </article>
-  </div>
-</section>
-
-<section class="tint m-only" id="research-m" aria-labelledby="h-research-m">
-  <div class="wrap">
-    <h2 id="h-research-m" class="title">Research</h2>
-    <div class="research-grid">
-      <div>
-        <p class="kicker">Software Quality Research Lab, Sharif · BSc thesis · 2025 to 2026</p>
-        <h3 class="subhead">Different models write better tests than one model with different personas.</h3>
-        <p class="copy"><a href="https://github.com/sepehrvahedi/testgen-council">TestCouncil</a> asks Qwen, DeepSeek and
-          Gemini to write unit tests for the same function, then merges them: 84.6% line and 92.5% branch coverage on
-          135 functions, against 49% line coverage for the best single model. Giving the models personas made no
-          difference. Using different models did.</p>
-        <p class="fine">Research Assistant and thesis lead. Supervisor: Prof. Seyed-Hassan Mirian-Hosseinabadi.</p>
-      </div>
-      <figure class="chart" aria-labelledby="fig2-cap-m">
-        <p class="chart-title">Average line coverage</p>
-        <div class="bar-row"><span>Qwen</span><div class="track"><i class="bar dim" style="--w:43%"></i></div><b>43.0%</b></div>
-        <div class="bar-row"><span>DeepSeek</span><div class="track"><i class="bar dim" style="--w:38.6%"></i></div><b>38.6%</b></div>
-        <div class="bar-row"><span>Gemini</span><div class="track"><i class="bar dim" style="--w:49%"></i></div><b>49.0%</b></div>
-        <div class="bar-row"><span>Council</span><div class="track"><i class="bar" style="--w:84.9%"></i></div><b>84.9%</b></div>
-        <div class="bar-row"><span>+ personas</span><div class="track"><i class="bar" style="--w:84.6%"></i></div><b>84.6%</b></div>
-        <figcaption id="fig2-cap-m">135 functions from HumanEval, MBPP and TheAlgorithms.</figcaption>
-      </figure>
-    </div>
-    <div class="research-second">
-      <p class="kicker">Intelligent Software Engineering Lab, Sharif · 2025 to 2026</p>
-      <p class="copy">A learned selection step decides which parts of a GitHub issue an LLM actually needs to write a good
-        title: <strong>37.3% fewer input tokens</strong>, within 0.004 BERTScore of GPT-4, on 2.6M+ issues.
-        Research Assistant with Prof. Abbas Heydarnoori.</p>
-    </div>
-  </div>
-</section>
-
-<section class="m-only" id="projects-m" aria-labelledby="h-projects-m">
-  <div class="wrap">
-    <h2 id="h-projects-m" class="title">Projects</h2>
-
-    <article class="project project-wide">
-      <img class="shot" src="assets/img/probcast.jpg" width="1280" height="889" loading="lazy"
-           alt="ProbCast forecast page: a one-year fan chart for Apple Inc. and the ideas behind it">
-      <div class="project-text">
-        <h3><a href="https://github.com/sepehrvahedi/probcast">ProbCast</a></h3>
-        <p>Stock forecasts that cannot see the future. Probabilistic forecasts for the 32 largest US companies, tested
-          month by month since 1990 using only what was public at the time, scored against a market-based guess and
-          checked for luck before an idea gets a say. Built for my MSc module, Financial Institutions and Markets.
-          Python, FastAPI, React.</p>
-      </div>
-    </article>
-
-    <div class="project-pair">
-      <article class="project">
-        <img class="shot shot-plain" src="assets/img/clackless.jpg" width="1280" height="651" loading="lazy"
-             alt="Spectrograms of keyboard typing before and after Clackless">
-        <h3><a href="https://github.com/sepehrvahedi/clackless">Clackless</a></h3>
-        <p>Removes keyboard noise from live calls on Teams, Zoom and Meet, on Windows, macOS and Linux. Typing while
-          nobody talks gets 50+ dB quieter, with about 0.1&nbsp;s of delay.</p>
-      </article>
-
-      <article class="project" id="limiter-m">
-        <div class="sim" aria-label="Token bucket demo">
-          <div class="sim-top">
-            <div class="bucket" id="sim-bucket-m" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-            <button type="button" class="btn" id="sim-send-m">Send request</button>
-          </div>
-          <output id="sim-tokens-m" for="sim-send-m">5 of 5 tokens</output>
-          <ol class="sim-log" id="sim-log-m" aria-live="polite"><li class="hint">Tap faster than once every two seconds.</li></ol>
-          <noscript><p class="fine">The demo needs JavaScript; the algorithm is in the repository either way.</p></noscript>
-        </div>
-        <h3><a href="https://github.com/sepehrvahedi/local-rate-limit">local-rate-limit</a></h3>
-        <p>Per-user, per-API rate limiting at the proxy, so no service has to implement it: the pattern I first built at
-          Tapsi, rebuilt in the open. Try it above: five tokens, one back every two seconds.</p>
-      </article>
-    </div>
-
-    <ul class="project-list">
-      <li><a href="https://github.com/sepehrvahedi/grad-tracker">Grad Tracker</a><span>Every UK graduate role, ranked against your CV on your own laptop. A rule-based scorer that agrees with an LLM at 0.83 rank correlation, in under a second.</span></li>
-      <li><a href="https://github.com/sepehrvahedi/testgen-council">TestCouncil</a><span>The thesis code and evaluation.</span></li>
-      <li><a href="https://github.com/sepehrvahedi/automatic-paper-critique">automatic-paper-critique</a><span>Four LLMs review a paper and rank each other's points in shuffled order; a Borda count merges them.</span></li>
-      <li><a href="https://github.com/sepehrvahedi?tab=repositories">All repositories</a><span>Including a C-Minus compiler front end.</span></li>
-    </ul>
-  </div>
-</section>
-
-<section class="tint m-only" id="teaching-m" aria-labelledby="h-teaching-m">
-  <div class="wrap">
-    <h2 id="h-teaching-m" class="title">Teaching and contests</h2>
-    <figure class="cf" id="cf-m" hidden>
-      <svg id="cf-chart-m" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <figcaption class="mono" id="cf-cap-m"></figcaption>
-    </figure>
-    <dl class="facts">
-      <div>
-        <dt>Competitive programming</dt>
-        <dd><a href="https://codeforces.com/profile/Bruuh.">Codeforces Candidate Master</a>, max rating 2075, top 1.5%.
-          Iran National Olympiad in Informatics, top-50 finalist in 2018 and 2019. 3rd of 65 teams at the AUT
-          Programming Contest.</dd>
-      </div>
-      <div>
-        <dt>Informatics Olympiad Teacher, NODET</dt>
-        <dd>2020 to 2021. Weekly algorithm and C++ classes, problem sets, mock contests and one-to-one coaching for gifted
-          high-school students. They won one gold and two silver national medals.</dd>
-      </div>
-      <div>
-        <dt>Teaching Assistant, Sharif</dt>
-        <dd>Advanced Programming (2024) and Scientific and Technical Presentation (2025 to 2026). Ran tutorials, designed
-          assignments, graded work and mentored student projects.</dd>
-      </div>
-      <div>
-        <dt>Mentoring</dt>
-        <dd>Onboarding mentor for a new engineer at Tapsi for three months.</dd>
-      </div>
-    </dl>
-  </div>
-</section>
-
-<section class="m-only" aria-labelledby="h-edu-m">
-  <div class="wrap">
-    <h2 id="h-edu-m" class="title">Education and skills</h2>
-    <dl class="facts">
-      <div>
-        <dt>MSc Software Systems Engineering</dt>
-        <dd>University College London, 2026 to 2027. Software Architecture, Validation &amp; Verification, Software
-          Development Practice, Machine Learning. Member of the UCL Computer Science Society.</dd>
-      </div>
-      <div>
-        <dt>BSc Computer Engineering</dt>
-        <dd>Sharif University of Technology, 2020 to 2026. UK 2:1 equivalent, 18.25/20 over the final two years. Six
-          years, because I worked at Tapsi through most of it.</dd>
-      </div>
-      <div><dt>Languages</dt><dd>Kotlin, Java, Python, C++, Go, TypeScript, JavaScript, SQL.</dd></div>
-      <div><dt>Backend</dt><dd>Spring Boot, Project Reactor, gRPC, REST, Kafka, MongoDB, Redis, JUnit.</dd></div>
-      <div><dt>Infrastructure</dt><dd>AWS, Kubernetes, Docker, Istio, Envoy, GitLab CI/CD, Airflow, Linux.</dd></div>
-      <div><dt>ML and LLM systems</dt><dd>NVIDIA Triton, PyTorch, Amazon Bedrock, MCP, RAG, LLM agents.</dd></div>
-      <div><dt>Spoken</dt><dd>English (IELTS 8.0), Persian (native), German (intermediate).</dd></div>
-    </dl>
-  </div>
-</section>
-
-<section class="d-only" id="projects" aria-labelledby="h-projects">
+<section id="projects" aria-labelledby="h-projects">
   <div class="wrap">
     <h2 id="h-projects" class="title">Projects</h2>
 
@@ -565,7 +328,7 @@
   </div>
 </section>
 
-<section class="tint d-only" id="skills" aria-labelledby="h-skills">
+<section class="tint" id="skills" aria-labelledby="h-skills">
   <div class="wrap">
     <h2 id="h-skills" class="title">Skills</h2>
     <dl class="facts">
@@ -611,6 +374,6 @@
   <output id="cmd-out" for="cmd-in"></output>
 </form>
 
-<script src="js/main.js?v=20261126i" defer></script>
+<script src="js/main.js?v=20261127c" defer></script>
 </body>
 </html>

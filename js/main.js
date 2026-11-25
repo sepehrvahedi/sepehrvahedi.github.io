@@ -987,22 +987,27 @@ const story = (() => {
     const W = road.clientWidth, H = road.clientHeight;
     if (!W || !H) return;                     // hidden (phones)
     svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-    // the road lives in the channel between the columns (stops take 0-41% and 59-100%)
-    const lo = W * 0.445, hi = W * 0.555;
+    // laptops: the road lives in the channel between the columns (stops take 0-41% and 59-100%), swerving towards
+    // each stop's side. phones: a rail in the left gutter, weaving a little, with each node level with its date.
+    const rail = matchMedia("(max-width: 734px)").matches;
+    const lo = rail ? 16 : W * 0.445, hi = rail ? 36 : W * 0.555, mid = (lo + hi) / 2;
+    const swing = rail ? 9 : W * 0.03;
     const stopPts = stops.map((s, i) => {
-      const p = { x: W * (s.dataset.side === "l" ? 0.46 : 0.54), y: s.offsetTop + 10 };
-      Object.assign(nodes[i].style, { left: `${p.x}px`, top: `${p.y}px` });
-      return p;
+      const x = rail ? mid : W * (s.dataset.side === "l" ? 0.46 : 0.54);
+      const date = s.querySelector(".stop-date");
+      const y = rail ? s.offsetTop + date.offsetTop + date.offsetHeight / 2 : s.offsetTop + 10;
+      Object.assign(nodes[i].style, { left: `${x}px`, top: `${y}px` });
+      return { x, y };
     });
     const pts = [{ x: stopPts[0].x, y: 0 }];
     stopPts.forEach((p, i) => {
       const prev = pts[pts.length - 1];
-      if (i > 0) pts.push({ x: clamp((prev.x + p.x) / 2 + W * (i % 2 ? 0.03 : -0.03), lo, hi), y: (prev.y + p.y) / 2 });
+      if (i > 0) pts.push({ x: clamp((prev.x + p.x) / 2 + (i % 2 ? swing : -swing), lo, hi), y: (prev.y + p.y) / 2 });
       pts.push(p);
     });
-    const endY = destTrack.offsetTop + 8, last = stopPts[stopPts.length - 1];
-    Object.assign(endNode.style, { left: `${W / 2}px`, top: `${endY}px` });
-    pts.push({ x: clamp((last.x + W / 2) / 2 - W * 0.03, lo, hi), y: (last.y + endY) / 2 }, { x: W / 2, y: endY });
+    const endX = rail ? mid : W / 2, endY = destTrack.offsetTop + 8, last = stopPts[stopPts.length - 1];
+    Object.assign(endNode.style, { left: `${endX}px`, top: `${endY}px` });
+    pts.push({ x: clamp((last.x + endX) / 2 - swing, lo, hi), y: (last.y + endY) / 2 }, { x: endX, y: endY });
     // cubic segments with vertical tangents, so the road never leaves the x-range of its points;
     // sampled here directly (cheap enough to redo every frame while a stop opens)
     let d = `M ${pts[0].x} ${pts[0].y}`;

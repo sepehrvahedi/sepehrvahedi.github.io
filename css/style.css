@@ -283,6 +283,33 @@ svg.road { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overf
 .pill { display: inline-block; font-weight: 600; color: #000 !important; background: var(--d-ink); border-radius: 999px; padding: 11px 22px; }
 .pill:hover { text-decoration: none; opacity: 0.9; }
 
+/* phones: the road becomes a rail down the left edge, the stops one column beside it, dates inline */
+@media (max-width: 734px) {
+  .hook { padding: 0 20px; height: 100vh; height: 100svh; }
+  .hook-text { font-size: clamp(40px, 12vw, 56px); line-height: 1.04; letter-spacing: -0.04em; }
+  .hook-sub { font-size: 18px; margin-top: 20px; }
+  .road-wrap.wrap { padding-left: 56px; padding-right: 20px; padding-top: 24px; }
+  .road-legend { display: none; }
+  .stop { width: auto; margin: 0 0 56px; }
+  .stop[data-side="l"], .stop[data-side="r"] { margin-left: 0; margin-right: 0; }
+  .stop .stop-date, .stop[data-side="l"] .stop-date, .stop[data-side="r"] .stop-date { position: static; left: auto; right: auto; text-align: left; font-size: 34px; line-height: 36px; margin-bottom: 12px; }
+  .stop-card { padding-top: 16px; }
+  .stop-card h3 { font-size: 19px; }
+  .stop-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; }
+  .stop-nums b { font-size: 28px; white-space: normal; }
+  .stop-nums span { max-width: none; }
+  .stop-text { font-size: 15.5px; }
+  .stop .city-canvas { height: min(84vw, 340px); }
+  .road-car .v { scale: 0.85; }
+  .node { width: 14px; height: 14px; margin: -7px 0 0 -7px; }
+  .road-base { stroke-width: 10; }
+  .dest-track { margin-left: -36px; }   /* the road column has a 56px rail gutter on the left and 20px on the right */
+  .destination { padding: 0 20px; height: 100vh; height: 100svh; }
+  .dest-text { font-size: clamp(40px, 12vw, 56px); }
+  .dest-sub { font-size: 18px; }
+  .dest-links { flex-direction: column; gap: 16px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hook-track { height: auto; }
   .hook { position: static; height: auto; min-height: 80vh; }
