@@ -2,29 +2,35 @@
 <!--
   Hello, source reader.
 
-  One HTML file, one stylesheet, one script. No framework, no build step, no tracking.
-  Everything reads fine with JavaScript off; the script only adds the theme switch, the command line
-  (press ":"), j/k navigation, the charts drawing in and the rate limiter demo.
+  One HTML file, one stylesheet, one script. No framework, no libraries, no build step, no tracking.
+  The portrait is drawn from a 118 kB photo, one character at a time, in a <canvas>.
+  The city runs Dijkstra's algorithm on a road graph every time you tap it.
+  The Codeforces chart is fetched from the Codeforces API when you scroll to it.
+  With JavaScript off, you get the photo and the text.
 
-  A plain-text CV lives next door:   curl -L https://sepehrvahedi.github.io/cv.txt
+  Plain-text CV:   curl -L https://sepehrvahedi.github.io/cv.txt
 -->
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Sepehr Vahedi, software engineer</title>
-  <meta name="description" content="Sepehr Vahedi, graduate software engineer in London. Backend, distributed systems and ML infrastructure. Nearly four years at a 10M+ user ride-hailing and delivery app; MSc at UCL; available from September 2027.">
+  <meta name="description" content="Sepehr Vahedi, software engineer in London. Backend, distributed systems and ML infrastructure. Nearly four years at a 10M+ user ride-hailing and delivery app; MSc at UCL; available from September 2027.">
   <meta name="author" content="Sepehr Vahedi">
+  <meta name="theme-color" content="#000000">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Sepehr Vahedi, software engineer">
-  <meta property="og:description" content="Backend, distributed systems and ML infrastructure. I make production systems measurably faster and prove they still give the same answers.">
+  <meta property="og:description" content="Backend, distributed systems and ML infrastructure. Tap the portrait.">
   <meta property="og:url" content="https://sepehrvahedi.github.io/">
-  <meta property="og:image" content="https://sepehrvahedi.github.io/assets/profile_picture.jpg">
+  <meta property="og:image" content="https://sepehrvahedi.github.io/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://sepehrvahedi.github.io/">
   <link rel="alternate" type="text/plain" href="cv.txt" title="CV as plain text">
-  <link rel="stylesheet" href="css/style.css?v=20261124b">
+  <link rel="preload" as="image" href="assets/img/portrait-london.jpg">
+  <link rel="stylesheet" media="(hover: hover) and (pointer: fine) and (min-width: 961px)" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css?v=20261125m">
   <script>
     document.documentElement.classList.add("js");
     try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
@@ -53,10 +59,10 @@
   <nav class="nav-inner" aria-label="Main">
     <a class="brand" href="#top">Sepehr Vahedi</a>
     <ul class="nav-links">
+      <li><a href="#city">Tapsi</a></li>
       <li><a href="#work">Work</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#teaching">Teaching</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-tools">
@@ -64,70 +70,86 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
       </button>
       <button type="button" class="icon-btn mono" id="open-cmd" aria-label="Open the command line" title="Command line (press :)">:</button>
-      <a class="nav-cv" href="assets/CV_Sepehr_Vahedi.pdf">Download CV</a>
+      <a class="nav-cv" href="assets/CV_Sepehr_Vahedi.pdf">CV</a>
     </div>
   </nav>
 </header>
 
 <main id="main">
 
-<!-- ============================================================ HERO: name and photo, nothing else -->
-<section class="hero" aria-labelledby="h-hero">
+<section class="hero dark" aria-labelledby="h-hero">
   <div class="wrap hero-grid">
+    <figure class="ascii" id="ascii">
+      <img src="assets/img/portrait-london.jpg" width="880" height="1100" alt="Sepehr Vahedi" fetchpriority="high">
+      <canvas aria-hidden="true"></canvas>
+      <div class="note-me" aria-hidden="true">
+        <p>This is me,<br>click on<br>the picture<span>based in London</span></p>
+        <svg viewBox="0 0 80 60"><path pathLength="1" d="M4 30 C 26 8, 52 10, 72 30"/><path pathLength="1" d="M58 28 L73 31 L71 16"/></svg>
+      </div>
+      <div class="tap-hint" id="tap-hint" hidden><span class="tap-ring" aria-hidden="true"></span><p>Tap the picture</p></div>
+      <figcaption class="ascii-note mono" id="ascii-note">Sepehr Vahedi, London.</figcaption>
+    </figure>
     <div class="hero-text">
-      <h1 id="h-hero" class="name">Sepehr Vahedi</h1>
-      <p class="role">Software engineer. Backend, distributed systems and ML infrastructure.</p>
-      <p class="hero-copy">I make production systems measurably faster, then prove they still give the same answers.
-        Nearly four years at Tapsi, a ride-hailing and delivery app with 10M+ monthly users.
-        Now an MSc student at UCL.</p>
-      <dl class="hero-facts">
-        <div><dt>Based in</dt><dd>London</dd></div>
-        <div><dt>Available</dt><dd>Full-time from September 2027</dd></div>
-        <div><dt>Right to work</dt><dd>Eligible for the UK Graduate visa, no sponsorship needed</dd></div>
-      </dl>
+      <h1 id="h-hero" class="name">Sepehr<br>Vahedi</h1>
+      <p class="role">Software engineer. I make systems that millions of people use measurably faster, then prove they still give the same answers.</p>
+      <ul class="hero-facts">
+        <li><b>Tapsi</b> Nearly 4 years, co-op to Senior Software Engineer</li>
+        <li><b>UCL</b> MSc Software Systems Engineering</li>
+        <li><b>Sept 2027</b> Available full-time in London, no sponsorship needed</li>
+      </ul>
       <p class="hero-links">
-        <a class="arrow" href="assets/CV_Sepehr_Vahedi.pdf">Download the CV</a>
+        <a class="arrow" href="assets/CV_Sepehr_Vahedi.pdf">CV</a>
         <a class="arrow" href="https://github.com/sepehrvahedi">GitHub</a>
         <a class="arrow" href="https://www.linkedin.com/in/sepehr-vahedi-8a8216216/">LinkedIn</a>
       </p>
     </div>
-    <figure class="portrait">
-      <img src="assets/profile_picture.jpg" width="1063" height="1063" alt="Sepehr Vahedi" fetchpriority="high">
-    </figure>
   </div>
 </section>
 
-<!-- ============================================================ ONE NUMBER, TOLD PROPERLY -->
-<section class="feature" aria-labelledby="h-fast">
+<section class="city-section dark" id="city" aria-labelledby="h-city">
   <div class="wrap">
-    <p class="kicker">Tapsi, ETA model server, 2026</p>
-    <h2 id="h-fast" class="huge">54×</h2>
-    <div class="feature-grid">
-      <p class="feature-copy">Every delivery estimate at Tapsi went through one model server. I found a serialisation
-        bottleneck, removed it and batched the sub-model calls. Throughput went from 70 to 3,800 requests a second per
-        pod, and median latency at peak from 866 to 62&nbsp;ms. Before it shipped I replayed 19,200 real requests: every
-        output was identical.</p>
-      <figure class="chart" aria-labelledby="fig1-cap">
-        <p class="chart-title">Requests a second, per pod</p>
-        <div class="bar-row"><span>Before</span><div class="track"><i class="bar dim" style="--w:1.84%"></i></div><b>70</b></div>
-        <div class="bar-row"><span>After</span><div class="track"><i class="bar" style="--w:100%"></i></div><b>3,800</b></div>
-        <p class="chart-title">Median latency at peak</p>
-        <div class="bar-row"><span>Before</span><div class="track"><i class="bar dim" style="--w:100%"></i></div><b>866 ms</b></div>
-        <div class="bar-row"><span>After</span><div class="track"><i class="bar" style="--w:7.2%"></i></div><b>62 ms</b></div>
-        <figcaption id="fig1-cap">Drawn to scale.</figcaption>
-      </figure>
+    <p class="kicker">Tapsi · ride-hailing and delivery · 10M+ monthly users</p>
+    <h2 id="h-city" class="title">Tap the city to call a car.</h2>
+    <div class="city-grid">
+      <div class="city-frame">
+        <canvas id="city-canvas" aria-label="A small city map with cars. Tapping it places a ride request and the nearest car by road drives to it."></canvas>
+        <p class="city-readout mono" id="city-readout" aria-live="polite">Searching the road graph from your tap. Nearest car by road, not by distance.</p>
+      </div>
+      <div class="city-copy">
+        <p class="copy">Every tap runs Dijkstra's algorithm from your pin across the road graph, and the first car it reaches gets the ride. The blue spread is the search. The straight-line distance is shown too, because it is always shorter and usually wrong.</p>
+        <p class="copy">At Tapsi I designed the Kotlin gRPC service behind every delivery estimate: an ML model first, falling back to road routing (OSRM), then a straight line. I owned it in production and moved five services onto it. With a data scientist, I took the team's first ML models live: estimate error fell from <strong>24% to 19%</strong>.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================ LEDGER OF RESULTS -->
+<section class="feature" aria-labelledby="h-fast">
+  <div class="wrap">
+    <p class="kicker">Tapsi · ETA model server · 2026</p>
+    <h2 id="h-fast" class="huge">54×</h2>
+    <p class="feature-copy">Every delivery estimate went through one model server. I found a serialisation bottleneck, removed it and batched the sub-model calls. Throughput per pod went from 70 to 3,800 requests a second; median latency at peak from 866 to 62&nbsp;ms. Before it shipped I replayed 19,200 real requests. Every output was identical.</p>
+    <figure class="flow" id="flow" aria-labelledby="flow-cap">
+      <div class="lane">
+        <p class="lane-label"><span>Before</span> 70 requests a second</p>
+        <canvas class="lane-canvas" data-rate="70" aria-hidden="true"></canvas>
+        <p class="lane-count mono"><output data-count="70">0</output> served</p>
+      </div>
+      <div class="lane">
+        <p class="lane-label"><span>After</span> 3,800 requests a second</p>
+        <canvas class="lane-canvas" data-rate="3800" aria-hidden="true"></canvas>
+        <p class="lane-count mono"><output data-count="3800">0</output> served</p>
+      </div>
+      <figcaption id="flow-cap">One pod each, since this came into view. The dots are slowed 20 times so you can see them; the counters run at the real rate.</figcaption>
+    </figure>
+  </div>
+</section>
+
 <section class="ledger-section" aria-labelledby="h-results">
   <div class="wrap">
     <h2 id="h-results" class="title">Other results, and how I know they are real.</h2>
     <table class="ledger">
       <thead><tr><th scope="col">Result</th><th scope="col">What changed</th><th scope="col">Evidence</th></tr></thead>
       <tbody>
-        <tr><td class="num">24% → 19%</td><td>Delivery ETA error, after taking the team's first ML models to production with a data scientist.</td><td>Six-city shadow runs, then switchback tests, with a CI gate against less accurate models.</td></tr>
         <tr><td class="num">2×</td><td>Daily deliveries, after an event-sourced Kafka backend for multi-delivery orders, built in a team of three.</td><td>1M+ events a day; measured after launch.</td></tr>
         <tr><td class="num">−45%</td><td>Infrastructure cost of the service behind every ride request, rewritten from Node.js to Kotlin.</td><td>Zero downtime during the switch; p95 latency at peak from 200 to 80&nbsp;ms.</td></tr>
         <tr><td class="num">6 weeks</td><td>A new school-transport backend for 12,000+ students, built by two backend engineers using Agile.</td><td>Launched on time, before LLM coding assistants existed.</td></tr>
@@ -137,7 +159,6 @@
   </div>
 </section>
 
-<!-- ============================================================ WORK -->
 <section id="work" aria-labelledby="h-work">
   <div class="wrap">
     <h2 id="h-work" class="title">Work</h2>
@@ -163,7 +184,7 @@
       <ul class="entry-body">
         <li>Designed the Kotlin gRPC service behind every delivery ETA: an ML model, falling back to OSRM road routing, then straight-line distance. Owned its code review, monitoring and on-call, and led the migration of five services onto it.</li>
         <li>Raised model-server throughput 54× and cut median latency at peak from 866 to 62&nbsp;ms.</li>
-        <li>Led the production rollout of the team's first ML models with a data scientist. ETA error fell from 24% to 19%.</li>
+        <li>Led the production rollout of the team's first ML models with a data scientist: six-city shadow runs, switchback tests and a CI gate against less accurate models. ETA error fell from 24% to 19%.</li>
       </ul>
     </article>
 
@@ -184,8 +205,7 @@
   </div>
 </section>
 
-<!-- ============================================================ RESEARCH (the one black section) -->
-<section class="black" id="research" aria-labelledby="h-research">
+<section class="tint" id="research" aria-labelledby="h-research">
   <div class="wrap">
     <h2 id="h-research" class="title">Research</h2>
     <div class="research-grid">
@@ -217,7 +237,6 @@
   </div>
 </section>
 
-<!-- ============================================================ PROJECTS -->
 <section id="projects" aria-labelledby="h-projects">
   <div class="wrap">
     <h2 id="h-projects" class="title">Projects</h2>
@@ -250,7 +269,7 @@
             <button type="button" class="btn" id="sim-send">Send request</button>
           </div>
           <output id="sim-tokens" for="sim-send">5 of 5 tokens</output>
-          <ol class="sim-log" id="sim-log" aria-live="polite"><li class="hint">Click faster than once every two seconds.</li></ol>
+          <ol class="sim-log" id="sim-log" aria-live="polite"><li class="hint">Tap faster than once every two seconds.</li></ol>
           <noscript><p class="fine">The demo needs JavaScript; the algorithm is in the repository either way.</p></noscript>
         </div>
         <h3><a href="https://github.com/sepehrvahedi/local-rate-limit">local-rate-limit</a></h3>
@@ -268,11 +287,20 @@
   </div>
 </section>
 
-<!-- ============================================================ TEACHING AND AWARDS -->
 <section class="tint" id="teaching" aria-labelledby="h-teaching">
   <div class="wrap">
-    <h2 id="h-teaching" class="title">Teaching and awards</h2>
+    <h2 id="h-teaching" class="title">Teaching and contests</h2>
+    <figure class="cf" id="cf" hidden>
+      <svg id="cf-chart" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <figcaption class="mono" id="cf-cap"></figcaption>
+    </figure>
     <dl class="facts">
+      <div>
+        <dt>Competitive programming</dt>
+        <dd><a href="https://codeforces.com/profile/Bruuh.">Codeforces Candidate Master</a>, max rating 2075, top 1.5%.
+          Iran National Olympiad in Informatics, top-50 finalist in 2018 and 2019. 3rd of 65 teams at the AUT
+          Programming Contest.</dd>
+      </div>
       <div>
         <dt>Informatics Olympiad Teacher, NODET</dt>
         <dd>2020 to 2021. Weekly algorithm and C++ classes, problem sets, mock contests and one-to-one coaching for gifted
@@ -287,17 +315,10 @@
         <dt>Mentoring</dt>
         <dd>Onboarding mentor for a new engineer at Tapsi for three months.</dd>
       </div>
-      <div>
-        <dt>Competitive programming</dt>
-        <dd><a href="https://codeforces.com/profile/Bruuh.">Codeforces Candidate Master</a>, max rating 2075, top 1.5%.
-          Iran National Olympiad in Informatics, top-50 finalist in 2018 and 2019. 3rd of 65 teams at the AUT
-          Programming Contest.</dd>
-      </div>
     </dl>
   </div>
 </section>
 
-<!-- ============================================================ EDUCATION AND SKILLS -->
 <section aria-labelledby="h-edu">
   <div class="wrap">
     <h2 id="h-edu" class="title">Education and skills</h2>
@@ -321,12 +342,11 @@
   </div>
 </section>
 
-<!-- ============================================================ CONTACT -->
-<section class="contact" id="contact" aria-labelledby="h-contact">
+<section class="contact dark" id="contact" aria-labelledby="h-contact">
   <div class="wrap">
     <h2 id="h-contact" class="title">Contact</h2>
     <p class="contact-line">Hiring for backend, infrastructure or ML-platform engineering from September 2027?
-      Email me at <a href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a>.</p>
+      <a href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a></p>
     <p class="hero-links">
       <a class="arrow" href="https://www.linkedin.com/in/sepehr-vahedi-8a8216216/">LinkedIn</a>
       <a class="arrow" href="https://github.com/sepehrvahedi">GitHub</a>
@@ -341,7 +361,8 @@
 
 <footer class="footer">
   <div class="wrap">
-    <p>Written by hand: one HTML file, one stylesheet, one script. No framework, no tracking. Press <kbd>:</kbd> for a command line, <kbd>j</kbd> and <kbd>k</kbd> to move between sections.</p>
+    <p>Written by hand, no libraries: the portrait is a photo redrawn as text, the city is Dijkstra on a random road graph, the chart above is live from Codeforces. <a href="https://github.com/sepehrvahedi/sepehrvahedi.github.io">Read the source.</a></p>
+    <p class="kbd-hint">Keyboard: <kbd>:</kbd> command line, <kbd>j</kbd> <kbd>k</kbd> next and previous section, <kbd>t</kbd> theme.</p>
     <p id="weight"></p>
     <p>© 2026 Sepehr Vahedi</p>
   </div>
@@ -353,6 +374,6 @@
   <output id="cmd-out" for="cmd-in"></output>
 </form>
 
-<script src="js/main.js?v=20261124b" defer></script>
+<script src="js/main.js?v=20261125m" defer></script>
 </body>
 </html>
