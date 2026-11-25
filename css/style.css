@@ -154,21 +154,23 @@ section + section:not(.tint):not(.dark):not(.feature) { border-top: 1px solid va
 .tap-hint.on { opacity: 1; }
 .tap-hint[hidden] { display: none; }
 .tap-hint p {
-  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); margin: 0; white-space: nowrap;
-  font: 600 15px var(--font); letter-spacing: -0.01em; color: #fff;
-  background: rgba(28, 28, 30, 0.82); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 999px; padding: 9px 16px;
-  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); margin: 0; white-space: nowrap;
+  font: 700 20px var(--font); letter-spacing: -0.02em; color: #000;
+  background: #f5f5f7; border-radius: 999px; padding: 14px 28px;
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.55), 0 10px 30px rgba(0, 0, 0, 0.6);
 }
-.tap-ring { position: absolute; left: 40%; top: 30%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55), inset 0 0 0 3px rgba(0, 0, 0, 0.55); }
-.tap-ring::after { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--d-accent); box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55); }
+.tap-ring { position: absolute; left: 40%; top: 30%; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55), inset 0 0 0 3px rgba(0, 0, 0, 0.55); }
+.tap-ring::after { content: ""; position: absolute; inset: 17px; border-radius: 50%; background: var(--d-accent); box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55); }
 .tap-hint.on .tap-ring { animation: tap 1.6s ease-out infinite; }
+.tap-hint.on p { animation: nudge 1.6s ease-in-out infinite; }   /* a gentle pulse, in step with the ring */
+@keyframes nudge { 0%, 100% { transform: translateX(-50%) scale(1); } 45% { transform: translateX(-50%) scale(1.06); } }
 @keyframes tap {
   0% { transform: scale(0.6); opacity: 0; }
   20% { transform: scale(1); opacity: 1; }
   45% { transform: scale(0.85); opacity: 1; }
   100% { transform: scale(1.5); opacity: 0; }
 }
-@media (prefers-reduced-motion: reduce) { .tap-hint.on .tap-ring { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .tap-hint.on .tap-ring, .tap-hint.on p { animation: none; } }
 .ascii-note { margin-top: 14px; font-size: 12px; color: var(--d-ink-3); letter-spacing: 0; min-height: 1.5em; }
 .ascii-note b { color: var(--d-ink-2); font-weight: 400; }
 
