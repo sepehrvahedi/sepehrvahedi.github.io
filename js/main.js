@@ -6,7 +6,8 @@
 
 const $ = (s) => document.querySelector(s);
 const sections = [...document.querySelectorAll("main section")];
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+// ?static shows every scroll-driven state at its end (used for full-page screenshots)
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches || /[?&]static\b/.test(location.search);
 const coarse = matchMedia("(pointer: coarse)").matches;
 const DPR = () => Math.min(2, window.devicePixelRatio || 1);
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
@@ -24,16 +25,6 @@ document.querySelectorAll(".chart").forEach((el) => {
   onVisible(el, (v) => v && el.classList.add("drawn"), "0px 0px -20% 0px");
 });
 
-// ------------------------------------------------------------------ theme
-const root = document.documentElement;
-const systemDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
-const currentTheme = () => root.dataset.theme || (systemDark() ? "dark" : "light");
-function setTheme(theme) {
-  root.dataset.theme = theme;
-  try { localStorage.setItem("theme", theme); } catch (e) { /* private mode: the choice lasts until reload */ }
-}
-$("#theme").addEventListener("click", () => setTheme(currentTheme() === "dark" ? "light" : "dark"));
-
 // ------------------------------------------------------------------ mark the current section in the nav
 const navLinks = new Map([...document.querySelectorAll(".nav-links a")].map((a) => [a.getAttribute("href").slice(1), a]));
 let current = 0;
@@ -48,7 +39,11 @@ if ("IntersectionObserver" in window) {
   sections.forEach((s) => spy.observe(s));
 }
 function go(index) {
-  current = clamp(index, 0, sections.length - 1);
+  // skip the sections hidden at this width (phones and laptops have different ones)
+  const step = index >= current ? 1 : -1;
+  let i = clamp(index, 0, sections.length - 1);
+  while (i > 0 && i < sections.length - 1 && !sections[i].getClientRects().length) i += step;
+  current = i;
   sections[current].scrollIntoView({ block: "start" });
 }
 
@@ -491,9 +486,7 @@ const portrait = (() => {
 // streets, a few diagonals and three faster main roads. Cars wander. A tap places a pickup on the
 // nearest junction and runs Dijkstra from it; the first car the search reaches, counting the part of
 // the street it is still on, gets the ride. Travel times use 25 km/h on streets and 45 km/h on main roads.
-const city = (() => {
-  const canvas = $("#city-canvas"), readout = $("#city-readout");
-  if (!canvas) return null;
+function makeCity(canvas, readout) {
   const ctx = canvas.getContext("2d");
   const ACCENT = "#2997ff", INK = "#f5f5f7";
   const SEARCH_MS = 950, FADE_MS = 1200, STREET_KMH = 25, MAIN_KMH = 45;
@@ -506,6 +499,7 @@ const city = (() => {
 
   function build() {
     W = canvas.clientWidth; H = canvas.clientHeight; dpr = DPR();
+    if (!W || !H) { roads = null; return false; }   // its panel is closed; built when it opens
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     spacing = W < 600 ? 40 : 52; metresPerPx = 150 / spacing;
     const nx = Math.ceil(W / spacing) + 2, ny = Math.ceil(H / spacing) + 2;
@@ -696,6 +690,7 @@ const city = (() => {
 
   function draw(now) {
     raf = 0;
+    if (!roads) return;
     const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
     if (!reduceMotion) step(dt);
     if (visible && now > nextAuto && now - lastUser > 7000 && jobs.filter((j) => !j.doneAt).length < 2) {
@@ -774,27 +769,27 @@ const city = (() => {
     kick();
   });
 
-  build();
-  draw(performance.now());
+  if (build()) draw(performance.now());
   onVisible(canvas, (v) => { visible = v; if (v) { nextAuto = Math.min(nextAuto, performance.now() + 900); kick(); } });
   let lastW = W;
-  addEventListener("resize", () => { if (canvas.clientWidth !== lastW) { lastW = canvas.clientWidth; build(); kick(); } });
+  addEventListener("resize", () => { if (canvas.clientWidth !== lastW) { lastW = canvas.clientWidth; if (build()) kick(); } });
 
   return {
     ride: () => {
+      if (!roads) return;
       const inside = nodes.map((n, k) => k).filter((k) => isInside(nodes[k], 30));
       lastUser = performance.now();
       dispatch(inside[(Math.random() * inside.length) | 0], true); kick();
     },
   };
-})();
+}
+const cities = [...document.querySelectorAll(".city-canvas")].map((c) => ({ el: c, api: makeCity(c, c.parentElement.querySelector(".city-readout")) }));
+const city = (cities.find((c) => c.el.id === "city-canvas") || cities[0] || {}).api || null;
 
 // ==================================================================== 54×: two lanes at the real rates
 // Each lane is one pod. Dots are emitted at a twentieth of the real rate so they can be seen;
 // the counters below them add up at the real rate, for as long as the lanes are on screen.
-(() => {
-  const flow = $("#flow");
-  if (!flow) return;
+document.querySelectorAll(".flow").forEach((flow) => {
   const SLOW = 20, TRAVEL = 1.5;
   const lanes = [...flow.querySelectorAll(".lane")].map((el) => {
     const canvas = el.querySelector("canvas");
@@ -831,16 +826,16 @@ const city = (() => {
   size();
   addEventListener("resize", size);
   onVisible(flow, (v) => { visible = v; if (v && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); } });
-})();
+});
 
 // ==================================================================== token bucket, 5 per 10 seconds
 // Same behaviour as the limiter in github.com/sepehrvahedi/local-rate-limit: tokens return continuously,
 // one every two seconds, up to five.
-(() => {
+document.querySelectorAll(".sim").forEach((sim) => {
   const MAX = 5, PER_SECOND = 5 / 10;
   const bucket = { tokens: MAX, at: performance.now() };
-  const cells = [...document.querySelectorAll("#sim-bucket i")];
-  const simLog = $("#sim-log"), simTokens = $("#sim-tokens"), sendBtn = $("#sim-send");
+  const cells = [...sim.querySelectorAll(".bucket i")];
+  const simLog = sim.querySelector(".sim-log"), simTokens = sim.querySelector("output"), sendBtn = sim.querySelector(".btn");
   if (!sendBtn) return;
   let started = null, served = 0, limited = 0;
 
@@ -873,12 +868,12 @@ const city = (() => {
   }
   sendBtn.addEventListener("click", send);
   draw();
-})();
+});
 
 // ==================================================================== Codeforces, fetched live
-(() => {
-  const fig = $("#cf"), svg = $("#cf-chart"), cap = $("#cf-cap");
-  if (!fig || !window.fetch) return;
+document.querySelectorAll(".cf").forEach((fig) => {
+  const svg = fig.querySelector("svg"), cap = fig.querySelector("figcaption");
+  if (!window.fetch) return;
   const NS = "http://www.w3.org/2000/svg";
   let data = null, asked = false;
   const title = (r) => r >= 2400 ? "International Grandmaster" : r >= 2300 ? "International Master" : r >= 2100 ? "Master"
@@ -931,14 +926,238 @@ const city = (() => {
     } catch (e) { /* offline or blocked: the static line below the chart already says 2075 */ }
     finally { clearTimeout(timer); }
   }
-  onVisible($("#teaching"), (v) => { if (v && !asked) { asked = true; load(); } }, "300px");
+  const panel = fig.closest(".tl-panel") || fig.parentElement;
+  onVisible(panel, (v) => { if (v && !asked) { asked = true; load(); } }, "300px");
+});
+
+// ==================================================================== the story (laptops): a road from 2018 to London
+// The hook stays pinned while its words light up one by one. Below it a road winds between the stops, swerving
+// towards study on the left and work on the right, always inside the channel between the two columns. It draws
+// itself as you scroll, and a traveller glides along it: a student, then the Tapsi car, the student again for the
+// research year, the car, a plane to London, and a London bus that pulls in at "Next stop". Opening a stop's detail
+// animates its height, and the road is rebuilt every frame of that, so nothing jumps. The finish is pinned like the
+// hook and lights up the same way.
+const story = (() => {
+  const road = $("#road");
+  if (!road) return null;
+  const splitWords = (el) => {
+    if (!el) return [];
+    const text = el.textContent.trim().split(/\s+/), out = [];
+    el.textContent = "";
+    text.forEach((w, i) => { const sp = document.createElement("span"); sp.textContent = w; out.push(sp); el.append(sp, i < text.length - 1 ? " " : ""); });
+    return out;
+  };
+  const hookWords = splitWords($(".hook-text")), track = $(".hook-track");
+  const destTrack = road.querySelector(".dest-track");
+  const destWords = [...splitWords(destTrack.querySelector(".dest-text")), ...splitWords(destTrack.querySelector(".dest-sub"))];
+  const destLinks = destTrack.querySelector(".dest-links");
+  const svg = road.querySelector("svg.road"), base = svg.querySelector(".road-base"), line = svg.querySelector(".road-line");
+  const car = road.querySelector(".road-car"), stops = [...road.querySelectorAll(".stop")];
+  const mkNode = (cls, c) => {
+    const n = document.createElement("i");
+    n.className = cls; n.setAttribute("aria-hidden", "true");
+    if (c) n.style.setProperty("--c", c);
+    road.append(n);
+    return n;
+  };
+  const nodes = stops.map((s) => mkNode("node", s.style.getPropertyValue("--c")));
+  const endNode = mkNode("node end");
+  let samples = [], total = 0, stopLen = [], built = false, modes = [];
+  const lit = new Map(), reached = stops.map(() => false);
+  const carPos = { l: 0, target: 0 };
+
+  const lengthAtY = (y) => {
+    if (!samples.length || y <= samples[0].y) return 0;
+    let lo = 0, hi = samples.length - 1;
+    if (y >= samples[hi].y) return samples[hi].l;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (samples[mid].y < y) lo = mid; else hi = mid; }
+    const a = samples[lo], b = samples[hi];
+    return a.l + ((y - a.y) / ((b.y - a.y) || 1)) * (b.l - a.l);
+  };
+  const at = (l) => {
+    let lo = 0, hi = samples.length - 1;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (samples[mid].l < l) lo = mid; else hi = mid; }
+    const a = samples[lo], b = samples[hi], t = (l - a.l) / ((b.l - a.l) || 1);
+    const c = samples[Math.min(lo + 3, samples.length - 1)];
+    return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, ang: (Math.atan2(c.y - a.y, c.x - a.x) * 180) / Math.PI + 90 };
+  };
+
+  function build() {
+    buildQueued = false;
+    const W = road.clientWidth, H = road.clientHeight;
+    if (!W || !H) return;                     // hidden (phones)
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    // the road lives in the channel between the columns (stops take 0-41% and 59-100%)
+    const lo = W * 0.445, hi = W * 0.555;
+    const stopPts = stops.map((s, i) => {
+      const p = { x: W * (s.dataset.side === "l" ? 0.46 : 0.54), y: s.offsetTop + 10 };
+      Object.assign(nodes[i].style, { left: `${p.x}px`, top: `${p.y}px` });
+      return p;
+    });
+    const pts = [{ x: stopPts[0].x, y: 0 }];
+    stopPts.forEach((p, i) => {
+      const prev = pts[pts.length - 1];
+      if (i > 0) pts.push({ x: clamp((prev.x + p.x) / 2 + W * (i % 2 ? 0.03 : -0.03), lo, hi), y: (prev.y + p.y) / 2 });
+      pts.push(p);
+    });
+    const endY = destTrack.offsetTop + 8, last = stopPts[stopPts.length - 1];
+    Object.assign(endNode.style, { left: `${W / 2}px`, top: `${endY}px` });
+    pts.push({ x: clamp((last.x + W / 2) / 2 - W * 0.03, lo, hi), y: (last.y + endY) / 2 }, { x: W / 2, y: endY });
+    // cubic segments with vertical tangents, so the road never leaves the x-range of its points;
+    // sampled here directly (cheap enough to redo every frame while a stop opens)
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    samples = [{ l: 0, x: pts[0].x, y: pts[0].y }];
+    let len = 0, px = pts[0].x, py = pts[0].y;
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i], k = (b.y - a.y) * 0.5;
+      const c1 = { x: a.x, y: a.y + k }, c2 = { x: b.x, y: b.y - k };
+      d += ` C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
+      const n = Math.max(8, Math.ceil((b.y - a.y) / 6));
+      for (let j = 1; j <= n; j++) {
+        const t = j / n, u = 1 - t;
+        const x = u * u * u * a.x + 3 * u * u * t * c1.x + 3 * u * t * t * c2.x + t * t * t * b.x;
+        const y = u * u * u * a.y + 3 * u * u * t * c1.y + 3 * u * t * t * c2.y + t * t * t * b.y;
+        len += Math.hypot(x - px, y - py); px = x; py = y;
+        samples.push({ l: len, x, y });
+      }
+    }
+    total = len;
+    base.setAttribute("d", d); line.setAttribute("d", d);
+    line.setAttribute("pathLength", total.toFixed(2));
+    line.style.strokeDasharray = `${total}`;
+    stopLen = stopPts.map((p) => lengthAtY(p.y));
+    // who travels which stretch
+    const L = (id) => stopLen[stops.findIndex((s) => s.id === id)] ?? Infinity;
+    modes = [[0, "walk"], [L("tapsi1"), "car"], [L("research"), "walk"], [L("tapsi2"), "car"],
+      [L("tapsi2") + 0.55 * (L("ucl") - L("tapsi2")), "plane"], [L("ucl"), "guard"]];
+    built = true;
+    update();
+  }
+  let buildQueued = false, lastWidth = 0;
+  const scheduleBuild = () => { if (!buildQueued) { buildQueued = true; requestAnimationFrame(build); } };
+
+  // words light in order as the scroll moves through their pinned track
+  function light(words, trackEl, key, until = 0.65) {
+    const tb = trackEl.getBoundingClientRect();
+    if (tb.bottom < 0 || tb.top > innerHeight) return -1;
+    const p = reduceMotion ? 1 : clamp(-tb.top / Math.max(1, tb.height - innerHeight) / until, 0, 1);
+    const n = Math.round(p * words.length);
+    if (lit.get(key) !== n) { lit.set(key, n); words.forEach((w, i) => w.classList.toggle("lit", i < n)); }
+    return p;
+  }
+
+  let raf = 0;
+  function update() {
+    raf = 0;
+    if (!road.offsetWidth) return;            // the story is hidden on phones
+    if (track) light(hookWords, track, "hook");
+    const dp = light(destWords, destTrack, "dest", 0.6);
+    if (dp >= 0) destLinks.classList.toggle("shown", dp >= 1);
+    if (!built) return;
+    const y = innerHeight * 0.6 - road.getBoundingClientRect().top;
+    carPos.target = reduceMotion ? total : clamp(lengthAtY(y), 0, total);
+    line.style.strokeDashoffset = `${total - carPos.target}`;
+    stops.forEach((s, k) => {
+      const on = carPos.target >= stopLen[k] - 1;
+      if (on !== reached[k]) { reached[k] = on; s.classList.toggle("reached", on); nodes[k].classList.toggle("reached", on); }
+    });
+    endNode.classList.toggle("reached", carPos.target >= total - 1);
+    glide();
+  }
+  // the traveller eases towards the end of the drawn road; walking legs move only while it moves
+  let carRaf = 0;
+  function glide() {
+    if (carRaf) cancelAnimationFrame(carRaf);
+    carRaf = 0;
+    const diff = carPos.target - carPos.l;
+    carPos.l += Math.abs(diff) < 0.5 || reduceMotion ? diff : diff * 0.16;
+    const p = at(carPos.l);
+    let mode = "walk";
+    for (const [from, m] of modes) if (carPos.l >= from - 1) mode = m;
+    if (car.dataset.mode !== mode) car.dataset.mode = mode;
+    const rot = mode === "walk" || mode === "guard" ? 0 : p.ang;   // people stay upright; vehicles follow the road
+    car.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
+    car.style.opacity = carPos.l > 2 ? 1 : 0;
+    car.classList.toggle("moving", Math.abs(diff) > 1.5);
+    if (carPos.l !== carPos.target) carRaf = requestAnimationFrame(glide);
+  }
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(update); };
+  addEventListener("scroll", schedule, { passive: true });
+  addEventListener("resize", () => { if (innerWidth !== lastWidth) { lastWidth = innerWidth; scheduleBuild(); } });
+  if ("ResizeObserver" in window) new ResizeObserver(scheduleBuild).observe(road);
+  if (document.fonts) document.fonts.ready.then(scheduleBuild);
+  addEventListener("load", scheduleBuild);
+  lastWidth = innerWidth;
+  build();
+
+  // A stop's detail is an outer box whose height always animates to its contents' height: when it opens or
+  // closes, when a demo tab switches, when the Codeforces chart arrives. The road observer redraws every frame.
+  const fit = (detail) => { detail.style.height = detail.classList.contains("open") ? `${detail.firstElementChild.offsetHeight}px` : "0px"; };
+  const contentWatch = "ResizeObserver" in window ? new ResizeObserver((entries) => entries.forEach((e) => fit(e.target.parentElement))) : null;
+  stops.forEach((s) => {
+    const detail = s.querySelector(".stop-detail");
+    if (!detail) return;
+    const inner = document.createElement("div");
+    inner.className = "detail-inner";
+    inner.append(...detail.childNodes);
+    detail.append(inner);
+    if (contentWatch) contentWatch.observe(inner);
+    detail.addEventListener("transitionend", (e) => { if (e.target === detail && e.propertyName === "height" && !detail.classList.contains("open")) detail.hidden = true; });
+  });
+  const open = (stop, yes = true) => {
+    const btn = stop.querySelector(".stop-more"), detail = stop.querySelector(".stop-detail");
+    if (!btn || !detail || (btn.getAttribute("aria-expanded") === "true") === yes) return;
+    btn.setAttribute("aria-expanded", String(yes));
+    if (yes) {
+      detail.hidden = false;
+      dispatchEvent(new Event("resize"));     // canvases inside size themselves now they are visible
+      detail.offsetHeight;                     // start the transition from 0
+    }
+    detail.classList.toggle("open", yes);
+    fit(detail);
+    if (!yes && reduceMotion) detail.hidden = true;
+  };
+  stops.forEach((s) => {
+    const btn = s.querySelector(".stop-more"), detail = s.querySelector(".stop-detail");
+    if (!btn || !detail) return;
+    detail.id = detail.id || `${s.id}-detail`;
+    btn.setAttribute("aria-controls", detail.id);
+    btn.addEventListener("click", () => open(s, btn.getAttribute("aria-expanded") !== "true"));
+  });
+  const openFromHash = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const s = id && document.getElementById(id);
+    if (s && s.classList.contains("stop")) open(s, true);
+  };
+  addEventListener("hashchange", openFromHash);
+  openFromHash();
+  document.querySelectorAll("[data-go]").forEach((el) => el.addEventListener("click", () => {
+    const s = document.getElementById(el.dataset.go);
+    if (s && s.classList.contains("stop")) open(s, true);
+  }));
+  // demo tabs inside a stop
+  document.querySelectorAll(".demo-tabs").forEach((tabs) => {
+    const box = tabs.parentElement;
+    tabs.querySelectorAll("[data-tab]").forEach((b) => {
+      const pane = box.querySelector(`[data-pane="${b.dataset.tab}"]`);
+      if (pane) { pane.id = pane.id || `pane-${b.dataset.tab}`; b.setAttribute("aria-controls", pane.id); }
+    });
+    tabs.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-tab]");
+      if (!b) return;
+      tabs.querySelectorAll("[data-tab]").forEach((t) => t.setAttribute("aria-pressed", String(t === b)));
+      box.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== b.dataset.tab; });
+      dispatchEvent(new Event("resize"));
+    });
+  });
+  return { open };
 })();
 
 // ==================================================================== command line
 const cmd = $("#cmd"), input = $("#cmd-in"), out = $("#cmd-out");
 const open = (url) => { window.location.href = url; };
 const esc = (text) => String(text).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-const ids = sections.map((s) => s.id).filter(Boolean);
+const ids = sections.map((s) => s.id).filter((id) => id && !/-m$/.test(id));
 const COMMANDS = {
   help: ["this list", () => say(Object.entries(COMMANDS).map(([k, [text]]) => `<b>${k.padEnd(9)}</b> ${esc(text)}`).join("\n"), true)],
   goto: ["goto NAME: " + ids.join(", "), (arg) => {
@@ -946,7 +1165,15 @@ const COMMANDS = {
     if (!el) return say("goto where? " + ids.join(", "), true);
     el.scrollIntoView({ block: "start" }); close();
   }],
-  ride: ["call a car in the city", () => { close(); $("#city").scrollIntoView({ block: "start" }); if (city) setTimeout(city.ride, 400); }],
+  ride: ["call a car in the city", () => {
+    close();
+    const stop = $("#tapsi2");
+    if (story && stop && stop.offsetParent) story.open(stop, true);
+    const visible = cities.find((c) => c.el.offsetParent);
+    if (!visible) return;
+    visible.el.scrollIntoView({ block: "center" });
+    setTimeout(visible.api.ride, 400);
+  }],
   reveal: ["show the photo under the portrait", () => {
     close(); window.scrollTo({ top: 0 });
     const c = $("#ascii canvas");
@@ -957,7 +1184,6 @@ const COMMANDS = {
   email: ["write to me", () => open("mailto:sepehr.vahedi@gmail.com")],
   github: ["github.com/sepehrvahedi", () => open("https://github.com/sepehrvahedi")],
   linkedin: ["LinkedIn profile", () => open("https://www.linkedin.com/in/sepehr-vahedi-8a8216216/")],
-  theme: ["theme [light|dark]", (arg) => { setTheme(arg === "light" || arg === "dark" ? arg : currentTheme() === "dark" ? "light" : "dark"); close(); }],
   top: ["back to the top", () => { window.scrollTo({ top: 0 }); close(); }],
   source: ["read the source of this page", () => open("https://github.com/sepehrvahedi/sepehrvahedi.github.io")],
   print: ["print this page as a CV", () => { close(); window.print(); }],
@@ -993,7 +1219,6 @@ document.addEventListener("keydown", (e) => {
   if (/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(e.target.tagName)) return;
   const keys = {
     j: () => go(current + 1), k: () => go(current - 1),
-    t: () => setTheme(currentTheme() === "dark" ? "light" : "dark"),
     ":": show, "/": show,
     "?": () => { show(); COMMANDS.help[1](); },
   };

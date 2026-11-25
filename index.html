@@ -10,7 +10,7 @@
 
   Plain-text CV:   curl -L https://sepehrvahedi.github.io/cv.txt
 -->
-<html lang="en-GB">
+<html lang="en-GB" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -24,17 +24,16 @@
   <meta property="og:url" content="https://sepehrvahedi.github.io/">
   <meta property="og:image" content="https://sepehrvahedi.github.io/assets/og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://sepehrvahedi.github.io/">
   <link rel="alternate" type="text/plain" href="cv.txt" title="CV as plain text">
   <link rel="preload" as="image" href="assets/img/portrait-london.jpg" media="(min-width: 735px)">
   <link rel="preload" as="image" href="assets/img/portrait-london-tall.jpg" media="(max-width: 734px)">
   <link rel="stylesheet" media="(hover: hover) and (pointer: fine) and (min-width: 961px)" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20261125t">
+  <link rel="stylesheet" href="css/style.css?v=20261126i">
   <script>
     document.documentElement.classList.add("js");
-    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
   <script type="application/ld+json">
   {
@@ -60,16 +59,12 @@
   <nav class="nav-inner" aria-label="Main">
     <a class="brand" href="#top">Sepehr Vahedi</a>
     <ul class="nav-links">
-      <li><a href="#city">Tapsi</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#research">Research</a></li>
+      <li><a href="#journey">Journey</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-tools">
-      <button type="button" class="icon-btn" id="theme" aria-label="Switch between light and dark">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
-      </button>
       <button type="button" class="icon-btn mono" id="open-cmd" aria-label="Open the command line" title="Command line (press :)">:</button>
       <a class="nav-cv" href="assets/CV_Sepehr_Vahedi.pdf">CV</a>
     </div>
@@ -100,9 +95,9 @@
       </div>
       <p class="role">Software engineer. I make systems that millions of people use measurably faster, then prove they still give the same answers.</p>
       <ul class="hero-facts">
-        <li><b>Tapsi</b> Nearly 4 years, co-op to Senior Software Engineer</li>
+        <li><b>Tapsi</b> Nearly 4 years; promoted to Senior Software Engineer in Jan 2024</li>
         <li><b>UCL</b> MSc Software Systems Engineering</li>
-        <li><b>Sept 2027</b> Available full-time in London, no sponsorship needed</li>
+        <li><b>Sep 2027</b> Available full-time in London, no sponsorship needed</li>
       </ul>
       <p class="hero-links">
         <a class="arrow" href="assets/CV_Sepehr_Vahedi.pdf">CV</a>
@@ -113,14 +108,191 @@
   </div>
 </section>
 
-<section class="city-section dark" id="city" aria-labelledby="h-city">
+<section class="dark story d-only" id="journey" aria-labelledby="h-story">
+  <div class="hook-track">
+    <div class="hook">
+      <p class="hook-kicker">2018 to 2027</p>
+      <h2 id="h-story" class="hook-text">It all began in 2018, with a programming olympiad.</h2>
+      <p class="hook-sub">Scroll to follow the road from there to London.</p>
+    </div>
+  </div>
+
+  <div class="wrap wide road-wrap" id="road">
+    <svg class="road" aria-hidden="true"><path class="road-base"/><path class="road-line"/></svg>
+    <p class="road-legend" aria-hidden="true"><span>Study</span><span>Work</span></p>
+    <div class="road-car" data-mode="walk" aria-hidden="true">
+      <svg class="v v-walk" viewBox="0 0 24 40"><rect class="leg l" x="7.4" y="24" width="4" height="13" rx="2" fill="#c7c7cc"/><rect class="leg r" x="12.6" y="24" width="4" height="13" rx="2" fill="#c7c7cc"/><rect x="5" y="12" width="14" height="15" rx="5" fill="#2997ff"/><rect x="15.5" y="13.5" width="4.5" height="10" rx="2" fill="#1b63b8"/><circle cx="12" cy="7" r="5.5" fill="#f1c9a5"/><path d="M6.4 7.2a5.6 5.6 0 0 1 11.2 0c-1.6-1.6-3.6-2.4-5.6-2.4s-4 .8-5.6 2.4z" fill="#2b2b2b"/></svg>
+      <svg class="v v-car" viewBox="0 0 24 40"><rect x="2" y="1" width="20" height="38" rx="7" fill="#FF5F38"/><rect x="5" y="9" width="14" height="8" rx="2.5" fill="#1a1a1a"/><rect x="5" y="27" width="14" height="6" rx="2" fill="#1a1a1a"/></svg>
+      <svg class="v v-plane" viewBox="0 0 40 40"><path d="M20 2c1.7 0 2.8 2 2.8 5v8.5L37 22.6v3.2l-14.2-3.4v9.2l4.2 3.2v2.4L20 35.7l-7 1.5v-2.4l4.2-3.2v-9.2L3 25.8v-3.2l14.2-7.1V7c0-3 1.1-5 2.8-5z" fill="#f5f5f7" stroke="#000" stroke-width="1.2"/></svg>
+      <svg class="v v-guard" viewBox="0 0 24 52"><rect class="leg l" x="7.6" y="33" width="4" height="16" rx="1.6" fill="#141414"/><rect class="leg r" x="12.4" y="33" width="4" height="16" rx="1.6" fill="#141414"/><rect x="7.4" y="34" width="1" height="14" fill="#c8102e"/><rect x="15.6" y="34" width="1" height="14" fill="#c8102e"/><rect x="5" y="19" width="14" height="16" rx="3" fill="#c8102e"/><rect x="5" y="28.5" width="14" height="2.6" fill="#f5f5f7"/><circle cx="12" cy="22.5" r=".8" fill="#e8b923"/><circle cx="12" cy="25.5" r=".8" fill="#e8b923"/><rect x="3.2" y="20" width="2.6" height="11" rx="1.3" fill="#c8102e"/><rect x="18.2" y="20" width="2.6" height="11" rx="1.3" fill="#c8102e"/><circle cx="12" cy="16" r="3.6" fill="#f1c9a5"/><path d="M5.6 15.5C5.4 6 7.6 1 12 1s6.6 5 6.4 14.5c-1.8.9-4 1.3-6.4 1.3s-4.6-.4-6.4-1.3z" fill="#141414"/><path d="M8.4 16.4c1.2 2.6 2.4 3.4 3.6 3.4s2.4-.8 3.6-3.4" fill="none" stroke="#e8b923" stroke-width=".7"/></svg>
+    </div>
+
+    <article class="stop" data-side="l" style="--c:#1F8ACB" id="olympiad">
+      <p class="stop-date">2018</p>
+      <div class="stop-card">
+        <header><span class="logo cf" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div><h3>Iran National Olympiad in Informatics</h3><p>Top-50 national finalist in 2018 and 2019</p></div></header>
+        <div class="stop-nums"><div><b>2075</b><span>Codeforces rating, Candidate Master</span></div><div><b>Top 1.5%</b><span>of rated Codeforces players</span></div></div>
+        <p class="stop-text">Where it started: algorithms. Twice a national olympiad finalist, then Candidate Master on Codeforces, and 3rd of 65 teams at the AUT Programming Contest.</p>
+        <button type="button" class="stop-more" aria-expanded="false">See the live rating chart</button>
+        <div class="stop-detail" hidden>
+          <figure class="cf" hidden><svg viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"></svg><figcaption class="mono"></figcaption></figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="stop" data-side="l" style="--c:#1966AB" id="sharif">
+      <p class="stop-date">Sep 2020</p>
+      <div class="stop-card">
+        <header><img class="logo" src="assets/logos/sharif.svg" alt=""><div><h3>Sharif University of Technology</h3><p>BSc Computer Engineering (Software Engineering), 2020 to 2026</p></div></header>
+        <p class="stop-text">One of Iran's top engineering universities. Six years, because from 2022 I was also shipping production systems at Tapsi. UK 2:1 equivalent, 18.25/20 over the final two years.</p>
+      </div>
+    </article>
+
+    <article class="stop" data-side="r" style="--c:#A8A8AD" id="nodet">
+      <p class="stop-date">2020</p>
+      <div class="stop-card">
+        <header><img class="logo" src="assets/logos/sampad.svg" alt=""><div><h3>Sampad (NODET)</h3><p>Informatics Olympiad Teacher, 2020 to 2021</p></div></header>
+        <div class="stop-nums"><div><b><i class="medal gold"></i>1 gold</b><span>national medal, my students</span></div><div><b><i class="medal silver"></i>2 silver</b><span>national medals, my students</span></div></div>
+        <p class="stop-text">I taught the next olympiad generation: weekly algorithm and C++ classes for gifted high-school students, problem sets, mock contests and one-to-one coaching.</p>
+      </div>
+    </article>
+
+    <article class="stop" data-side="r" style="--c:#FF5F38" id="tapsi1">
+      <p class="stop-date">Feb 2022</p>
+      <div class="stop-card">
+        <header><img class="logo wide" src="assets/logos/tapsi-en.png" alt="Tapsi"><div><h3>Software Engineer at Tapsi</h3><p>Ride-hailing and delivery app, 10M+ monthly users · Tehran</p></div></header>
+        <div class="stop-nums"><div><b>6 weeks</b><span>to a new school-transport backend, 12,000+ students</span></div><div><b>−67%</b><span>GPS-service pods</span></div></div>
+        <p class="stop-text">Joined on two BSc placements, then stayed on full-time alongside my degree. Built a school-transport backend with one other engineer and, on my own initiative, a rate limiter that every public-facing service adopted.</p>
+        <p class="stop-stack">Go · Envoy and Lua · Istio · Kubernetes</p>
+        <button type="button" class="stop-more" aria-expanded="false">Try the rate limiter</button>
+        <div class="stop-detail" hidden>
+          <ul class="ticks">
+            <li>Formal BSc placements: Feb to Sep 2022 and Jul 2023 to Jan 2024; full-time work alongside study in between.</li>
+            <li>Rewrote reverse geocoding in Go, with adaptive GPS intervals, caching and filtering: 67% fewer GPS-service pods.</li>
+            <li>Per-user, per-API rate limiting as an Envoy Lua filter on Istio, adopted by every service exposed to external clients. Same algorithm below; <a href="https://github.com/sepehrvahedi/local-rate-limit">open-source rebuild</a>.</li>
+          </ul>
+          <div class="sim" aria-label="Token bucket demo">
+            <div class="sim-top"><div class="bucket" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><button type="button" class="btn">Send request</button></div>
+            <output class="sim-tokens">5 of 5 tokens</output>
+            <ol class="sim-log" aria-live="polite"><li class="hint">Five tokens, one back every two seconds. Click faster than that.</li></ol>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="stop" data-side="r" style="--c:#FF5F38" id="promotion">
+      <p class="stop-date">Jan 2024</p>
+      <div class="stop-card">
+        <header><img class="logo wide" src="assets/logos/tapsi-en.png" alt="Tapsi"><div><h3>Promoted to Senior Software Engineer</h3><p>Tapsi · first stint, Feb 2022 to Dec 2024</p></div></header>
+        <div class="stop-nums"><div><b>2×</b><span>daily deliveries</span></div><div><b>−45%</b><span>infrastructure cost</span></div></div>
+        <p class="stop-text">One of three engineers on the event-sourced Kafka backend that lets customers place several deliveries at once, and the lead on a zero-downtime rewrite of the service behind every ride request.</p>
+        <p class="stop-stack">Kafka · MongoDB · Redis · Kotlin · Spring Boot · Project Reactor</p>
+        <button type="button" class="stop-more" aria-expanded="false">See how it was done</button>
+        <div class="stop-detail" hidden>
+          <ul class="ticks">
+            <li>Kafka, MongoDB and Redis, 1M+ events a day; daily deliveries doubled after launch.</li>
+            <li>Ride-request service rewritten from Node.js to Kotlin (Spring Boot, Project Reactor), with zero downtime: 45% lower infrastructure cost, p95 at peak 200 → 80&nbsp;ms.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="stop" data-side="l" style="--c:#1966AB" id="research">
+      <p class="stop-date">2025</p>
+      <div class="stop-card">
+        <header><img class="logo" src="assets/logos/sharif.svg" alt=""><div><h3>Final year at Sharif: two labs and a thesis</h3><p>Intelligent Software Engineering Lab · Software Quality Research Lab</p></div></header>
+        <div class="stop-nums"><div><b>84.6%</b><span>line coverage from three LLMs together, vs 49% for the best one alone</span></div><div><b>−37.3%</b><span>LLM input tokens, within 0.004 BERTScore of GPT-4</span></div></div>
+        <p class="stop-text">I left Tapsi in Dec 2024 to finish my degree full-time and do research (Mar 2025 to Jul 2026). My thesis, TestCouncil, has three different LLMs write unit tests for the same function and merges them. I was also a teaching assistant for Advanced Programming and for Scientific and Technical Presentation.</p>
+        <button type="button" class="stop-more" aria-expanded="false">See the results</button>
+        <div class="stop-detail" hidden>
+          <figure class="chart">
+            <p class="chart-title">Average line coverage, 135 functions</p>
+            <div class="bar-row"><span>Qwen</span><div class="track"><i class="bar dim" style="--w:43%"></i></div><b>43.0%</b></div>
+            <div class="bar-row"><span>DeepSeek</span><div class="track"><i class="bar dim" style="--w:38.6%"></i></div><b>38.6%</b></div>
+            <div class="bar-row"><span>Gemini</span><div class="track"><i class="bar dim" style="--w:49%"></i></div><b>49.0%</b></div>
+            <div class="bar-row"><span>Council</span><div class="track"><i class="bar" style="--w:84.9%"></i></div><b>84.9%</b></div>
+            <div class="bar-row"><span>+ personas</span><div class="track"><i class="bar" style="--w:84.6%"></i></div><b>84.6%</b></div>
+            <figcaption>Using different models helped; giving them personas changed nothing. <a href="https://github.com/sepehrvahedi/testgen-council">TestCouncil on GitHub</a></figcaption>
+          </figure>
+          <ul class="ticks">
+            <li>Software Quality Research Lab (Aug 2025 to Jul 2026), with Prof. Seyed-Hassan Mirian-Hosseinabadi: research assistant and thesis lead.</li>
+            <li>Intelligent Software Engineering Lab (Mar 2025 to Feb 2026), with Prof. Abbas Heydarnoori: a learned step picks which parts of a GitHub issue an LLM needs to title it. 37.3% fewer input tokens on 2.6M+ issues, within 0.004 BERTScore of GPT-4.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="stop" data-side="r" style="--c:#FF5F38" id="tapsi2">
+      <p class="stop-date">Dec 2025</p>
+      <div class="stop-card">
+        <header><img class="logo wide" src="assets/logos/tapsi-en.png" alt="Tapsi"><div><h3>Back at Tapsi as Senior Software Engineer</h3><p>Delivery and Marketplace · full-time until Sep 2026</p></div></header>
+        <div class="stop-nums"><div><b>54×</b><span>model-server throughput per pod</span></div><div><b>24% → 19%</b><span>delivery ETA error (MAPE)</span></div></div>
+        <p class="stop-text">I designed and owned the service that answers "how long will it take?" for every delivery (code review, monitoring, on-call) and moved five services onto it. I took the team's first ML models to production and gave the model server 54 times the throughput, with identical answers on 19,200 replayed requests.</p>
+        <p class="stop-stack">Kotlin · gRPC · NVIDIA Triton · Airflow · OSRM</p>
+        <button type="button" class="stop-more" aria-expanded="false">Try the demos</button>
+        <div class="stop-detail" hidden>
+          <div class="demo-tabs">
+            <button type="button" aria-pressed="true" data-tab="city">Illustration: nearest car by road</button>
+            <button type="button" aria-pressed="false" data-tab="flow">54× in real time</button>
+          </div>
+          <div class="demo-pane" data-pane="city">
+            <canvas class="city-canvas" id="city-canvas" role="img" aria-label="A small city map with cars. Clicking it places a ride request and the nearest car by road drives to it."></canvas>
+            <p class="city-readout mono" aria-live="polite">An illustration, not Tapsi's code. Click the map: Dijkstra searches the roads from your pin, and the nearest car by road, not by distance, gets the ride.</p>
+          </div>
+          <div class="demo-pane" data-pane="flow" hidden>
+            <figure class="flow">
+              <div class="lane"><p class="lane-label"><span>Before</span> 70 requests a second</p><canvas class="lane-canvas" data-rate="70" aria-hidden="true"></canvas><p class="lane-count mono"><output data-count="70">0</output> served</p></div>
+              <div class="lane"><p class="lane-label"><span>After</span> 3,800 requests a second</p><canvas class="lane-canvas" data-rate="3800" aria-hidden="true"></canvas><p class="lane-count mono"><output data-count="3800">0</output> served</p></div>
+              <figcaption>One pod each. Dots slowed 20 times; counters at the real rate. Outputs were identical on 19,200 replayed requests.</figcaption>
+            </figure>
+          </div>
+          <ul class="ticks">
+            <li>Designed the Kotlin gRPC ETA service, owned its code review, monitoring and on-call, and moved five services onto it.</li>
+            <li>Six-city shadow runs, switchback tests, a CI gate against less accurate models and Airflow monitoring for the first ML models.</li>
+            <li>Model server: removed a serialisation bottleneck and batched sub-model calls. 70 → 3,800 requests a second per pod; median latency at peak 866 → 62&nbsp;ms.</li>
+            <li>Onboarding mentor for a new engineer for three months.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="stop" data-side="l" style="--c:#993BFF" id="ucl">
+      <p class="stop-date">Sep 2026</p>
+      <div class="stop-card">
+        <header><img class="logo" src="assets/logos/ucl.svg" alt=""><div><h3>University College London</h3><p>MSc Software Systems Engineering, until Sep 2027</p></div></header>
+        <p class="stop-text">Moved to London for the MSc: software architecture, verification and validation, and machine learning, plus Financial Institutions and Markets, where I built <a href="https://github.com/sepehrvahedi/probcast">ProbCast</a>.</p>
+      </div>
+    </article>
+
+    <article class="stop" data-side="r" style="--c:#EB1F79" id="pillsorted">
+      <p class="stop-date">Nov 2026</p>
+      <div class="stop-card">
+        <header><img class="logo" src="assets/logos/pillsorted.svg" alt=""><div><h3>Software Engineer at PillSorted</h3><p>NHS online delivery pharmacy · Cambridge, hybrid · part-time</p></div></header>
+        <p class="stop-text">Alongside the MSc, I'm the sole engineer building Ask PillSorted (in development): an iOS and Android chat that will answer patients' questions from their own pharmacy records.</p>
+        <p class="stop-stack">Amazon Bedrock · LLM agent with tools over MCP · rule-based guardrails · retrieval citing NHS sources</p>
+      </div>
+    </article>
+
+    <div class="dest-track" id="next">
+      <div class="destination">
+        <h2 class="dest-text">Next stop: your team.</h2>
+        <p class="dest-sub">Available full-time in London from September 2027. Eligible for the UK Graduate visa, so no sponsorship is needed.</p>
+        <p class="dest-links"><a class="pill" href="assets/CV_Sepehr_Vahedi.pdf" download>Download CV</a> <a class="arrow" href="mailto:sepehr.vahedi@gmail.com">sepehr.vahedi@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- phones keep the earlier single-column page -->
+<section class="city-section dark m-only" id="city-m" aria-labelledby="h-city-m">
   <div class="wrap">
     <p class="kicker">Tapsi · ride-hailing and delivery · 10M+ monthly users</p>
-    <h2 id="h-city" class="title">Tap the city to call a car.</h2>
+    <h2 id="h-city-m" class="title">Tap the city to call a car.</h2>
     <div class="city-grid">
       <div class="city-frame">
-        <canvas id="city-canvas" aria-label="A small city map with cars. Tapping it places a ride request and the nearest car by road drives to it."></canvas>
-        <p class="city-readout mono" id="city-readout" aria-live="polite">Searching the road graph from your tap. Nearest car by road, not by distance.</p>
+        <canvas class="city-canvas" id="city-canvas-m" aria-label="A small city map with cars. Tapping it places a ride request and the nearest car by road drives to it."></canvas>
+        <p class="city-readout mono" id="city-readout-m" aria-live="polite">Searching the road graph from your tap. Nearest car by road, not by distance.</p>
       </div>
       <div class="city-copy">
         <p class="copy">Every tap runs Dijkstra's algorithm from your pin across the road graph, and the first car it reaches gets the ride. The blue spread is the search. The straight-line distance is shown too, because it is always shorter and usually wrong.</p>
@@ -130,12 +302,12 @@
   </div>
 </section>
 
-<section class="feature" aria-labelledby="h-fast">
+<section class="feature m-only" aria-labelledby="h-fast-m">
   <div class="wrap">
     <p class="kicker">Tapsi · ETA model server · 2026</p>
-    <h2 id="h-fast" class="huge">54×</h2>
+    <h2 id="h-fast-m" class="huge">54×</h2>
     <p class="feature-copy">Every delivery estimate went through one model server. I found a serialisation bottleneck, removed it and batched the sub-model calls. Throughput per pod went from 70 to 3,800 requests a second; median latency at peak from 866 to 62&nbsp;ms. Before it shipped I replayed 19,200 real requests. Every output was identical.</p>
-    <figure class="flow" id="flow" aria-labelledby="flow-cap">
+    <figure class="flow" id="flow-m" aria-labelledby="flow-cap-m">
       <div class="lane">
         <p class="lane-label"><span>Before</span> 70 requests a second</p>
         <canvas class="lane-canvas" data-rate="70" aria-hidden="true"></canvas>
@@ -146,14 +318,14 @@
         <canvas class="lane-canvas" data-rate="3800" aria-hidden="true"></canvas>
         <p class="lane-count mono"><output data-count="3800">0</output> served</p>
       </div>
-      <figcaption id="flow-cap">One pod each, since this came into view. The dots are slowed 20 times so you can see them; the counters run at the real rate.</figcaption>
+      <figcaption id="flow-cap-m">One pod each, since this came into view. The dots are slowed 20 times so you can see them; the counters run at the real rate.</figcaption>
     </figure>
   </div>
 </section>
 
-<section class="ledger-section" aria-labelledby="h-results">
+<section class="ledger-section m-only" aria-labelledby="h-results-m">
   <div class="wrap">
-    <h2 id="h-results" class="title">Other results, and how I know they are real.</h2>
+    <h2 id="h-results-m" class="title">Other results, and how I know they are real.</h2>
     <table class="ledger">
       <thead><tr><th scope="col">Result</th><th scope="col">What changed</th><th scope="col">Evidence</th></tr></thead>
       <tbody>
@@ -166,9 +338,9 @@
   </div>
 </section>
 
-<section id="work" aria-labelledby="h-work">
+<section class="m-only" id="work-m" aria-labelledby="h-work-m">
   <div class="wrap">
-    <h2 id="h-work" class="title">Work</h2>
+    <h2 id="h-work-m" class="title">Work</h2>
 
     <article class="entry">
       <div class="entry-head">
@@ -212,9 +384,9 @@
   </div>
 </section>
 
-<section class="tint" id="research" aria-labelledby="h-research">
+<section class="tint m-only" id="research-m" aria-labelledby="h-research-m">
   <div class="wrap">
-    <h2 id="h-research" class="title">Research</h2>
+    <h2 id="h-research-m" class="title">Research</h2>
     <div class="research-grid">
       <div>
         <p class="kicker">Software Quality Research Lab, Sharif · BSc thesis · 2025 to 2026</p>
@@ -225,14 +397,14 @@
           difference. Using different models did.</p>
         <p class="fine">Research Assistant and thesis lead. Supervisor: Prof. Seyed-Hassan Mirian-Hosseinabadi.</p>
       </div>
-      <figure class="chart" aria-labelledby="fig2-cap">
+      <figure class="chart" aria-labelledby="fig2-cap-m">
         <p class="chart-title">Average line coverage</p>
         <div class="bar-row"><span>Qwen</span><div class="track"><i class="bar dim" style="--w:43%"></i></div><b>43.0%</b></div>
         <div class="bar-row"><span>DeepSeek</span><div class="track"><i class="bar dim" style="--w:38.6%"></i></div><b>38.6%</b></div>
         <div class="bar-row"><span>Gemini</span><div class="track"><i class="bar dim" style="--w:49%"></i></div><b>49.0%</b></div>
         <div class="bar-row"><span>Council</span><div class="track"><i class="bar" style="--w:84.9%"></i></div><b>84.9%</b></div>
         <div class="bar-row"><span>+ personas</span><div class="track"><i class="bar" style="--w:84.6%"></i></div><b>84.6%</b></div>
-        <figcaption id="fig2-cap">135 functions from HumanEval, MBPP and TheAlgorithms.</figcaption>
+        <figcaption id="fig2-cap-m">135 functions from HumanEval, MBPP and TheAlgorithms.</figcaption>
       </figure>
     </div>
     <div class="research-second">
@@ -244,9 +416,9 @@
   </div>
 </section>
 
-<section id="projects" aria-labelledby="h-projects">
+<section class="m-only" id="projects-m" aria-labelledby="h-projects-m">
   <div class="wrap">
-    <h2 id="h-projects" class="title">Projects</h2>
+    <h2 id="h-projects-m" class="title">Projects</h2>
 
     <article class="project project-wide">
       <img class="shot" src="assets/img/probcast.jpg" width="1280" height="889" loading="lazy"
@@ -269,14 +441,14 @@
           nobody talks gets 50+ dB quieter, with about 0.1&nbsp;s of delay.</p>
       </article>
 
-      <article class="project" id="limiter">
+      <article class="project" id="limiter-m">
         <div class="sim" aria-label="Token bucket demo">
           <div class="sim-top">
-            <div class="bucket" id="sim-bucket" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-            <button type="button" class="btn" id="sim-send">Send request</button>
+            <div class="bucket" id="sim-bucket-m" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <button type="button" class="btn" id="sim-send-m">Send request</button>
           </div>
-          <output id="sim-tokens" for="sim-send">5 of 5 tokens</output>
-          <ol class="sim-log" id="sim-log" aria-live="polite"><li class="hint">Tap faster than once every two seconds.</li></ol>
+          <output id="sim-tokens-m" for="sim-send-m">5 of 5 tokens</output>
+          <ol class="sim-log" id="sim-log-m" aria-live="polite"><li class="hint">Tap faster than once every two seconds.</li></ol>
           <noscript><p class="fine">The demo needs JavaScript; the algorithm is in the repository either way.</p></noscript>
         </div>
         <h3><a href="https://github.com/sepehrvahedi/local-rate-limit">local-rate-limit</a></h3>
@@ -294,12 +466,12 @@
   </div>
 </section>
 
-<section class="tint" id="teaching" aria-labelledby="h-teaching">
+<section class="tint m-only" id="teaching-m" aria-labelledby="h-teaching-m">
   <div class="wrap">
-    <h2 id="h-teaching" class="title">Teaching and contests</h2>
-    <figure class="cf" id="cf" hidden>
-      <svg id="cf-chart" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <figcaption class="mono" id="cf-cap"></figcaption>
+    <h2 id="h-teaching-m" class="title">Teaching and contests</h2>
+    <figure class="cf" id="cf-m" hidden>
+      <svg id="cf-chart-m" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <figcaption class="mono" id="cf-cap-m"></figcaption>
     </figure>
     <dl class="facts">
       <div>
@@ -326,9 +498,9 @@
   </div>
 </section>
 
-<section aria-labelledby="h-edu">
+<section class="m-only" aria-labelledby="h-edu-m">
   <div class="wrap">
-    <h2 id="h-edu" class="title">Education and skills</h2>
+    <h2 id="h-edu-m" class="title">Education and skills</h2>
     <dl class="facts">
       <div>
         <dt>MSc Software Systems Engineering</dt>
@@ -344,6 +516,64 @@
       <div><dt>Backend</dt><dd>Spring Boot, Project Reactor, gRPC, REST, Kafka, MongoDB, Redis, JUnit.</dd></div>
       <div><dt>Infrastructure</dt><dd>AWS, Kubernetes, Docker, Istio, Envoy, GitLab CI/CD, Airflow, Linux.</dd></div>
       <div><dt>ML and LLM systems</dt><dd>NVIDIA Triton, PyTorch, Amazon Bedrock, MCP, RAG, LLM agents.</dd></div>
+      <div><dt>Spoken</dt><dd>English (IELTS 8.0), Persian (native), German (intermediate).</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="d-only" id="projects" aria-labelledby="h-projects">
+  <div class="wrap">
+    <h2 id="h-projects" class="title">Projects</h2>
+
+    <article class="project project-wide">
+      <img class="shot" src="assets/img/probcast.jpg" width="1280" height="889" loading="lazy"
+           alt="ProbCast forecast page: a one-year fan chart for Apple Inc. and the ideas behind it">
+      <div class="project-text">
+        <h3><a href="https://github.com/sepehrvahedi/probcast">ProbCast</a></h3>
+        <p>Stock forecasts that cannot see the future. Probabilistic forecasts for the 32 largest US companies, tested
+          month by month since 1990 using only what was public at the time, scored against a market-based guess and
+          checked for luck before an idea gets a say. Built for my MSc module, Financial Institutions and Markets.
+          Python, FastAPI, React.</p>
+      </div>
+    </article>
+
+    <div class="project-pair">
+      <article class="project">
+        <img class="shot shot-plain" src="assets/img/clackless.jpg" width="1280" height="651" loading="lazy"
+             alt="Spectrograms of keyboard typing before and after Clackless">
+        <h3><a href="https://github.com/sepehrvahedi/clackless">Clackless</a></h3>
+        <p>Removes keyboard noise from live calls on Teams, Zoom and Meet, on Windows, macOS and Linux. Typing while
+          nobody talks gets 50+ dB quieter, with about 0.1&nbsp;s of delay.</p>
+      </article>
+
+      <article class="project" id="limiter">
+        <div class="project-callout">
+          <p class="mono">200 OK · 200 OK · 200 OK · 429 Too Many Requests</p>
+        </div>
+        <h3><a href="https://github.com/sepehrvahedi/local-rate-limit">local-rate-limit</a></h3>
+        <p>Per-user, per-API rate limiting at the proxy, so no service has to implement it: the limiter I first built at
+          Tapsi, rebuilt in the open. <a href="#tapsi1" data-go="tapsi1">Try it in the timeline</a>.</p>
+      </article>
+    </div>
+
+    <ul class="project-list">
+      <li><a href="https://github.com/sepehrvahedi/grad-tracker">Grad Tracker</a><span>Every UK graduate role, ranked against your CV on your own laptop. A rule-based scorer that agrees with an LLM at 0.83 rank correlation, in under a second.</span></li>
+      <li><a href="https://github.com/sepehrvahedi/testgen-council">TestCouncil</a><span>The thesis code and evaluation.</span></li>
+      <li><a href="https://github.com/sepehrvahedi/automatic-paper-critique">automatic-paper-critique</a><span>Four LLMs review a paper and rank each other's points in shuffled order; a Borda count merges them.</span></li>
+      <li><a href="https://github.com/sepehrvahedi?tab=repositories">All repositories</a><span>Including a C-Minus compiler front end.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="tint d-only" id="skills" aria-labelledby="h-skills">
+  <div class="wrap">
+    <h2 id="h-skills" class="title">Skills</h2>
+    <dl class="facts">
+      <div><dt>Languages</dt><dd>Kotlin, Java, Python, C++, Go, TypeScript, JavaScript, SQL.</dd></div>
+      <div><dt>Backend</dt><dd>Spring Boot, Project Reactor, gRPC, REST, Kafka, MongoDB, Redis, JUnit.</dd></div>
+      <div><dt>Infrastructure</dt><dd>AWS, Kubernetes, Docker, Istio, Envoy, GitLab CI/CD, Airflow, Linux.</dd></div>
+      <div><dt>ML and LLM systems</dt><dd>NVIDIA Triton, PyTorch, Amazon Bedrock, MCP, RAG, LLM agents.</dd></div>
+      <div><dt>Ways of working</dt><dd>Agile and Scrum, code review, on-call, shadow and switchback rollouts, mentoring.</dd></div>
       <div><dt>Spoken</dt><dd>English (IELTS 8.0), Persian (native), German (intermediate).</dd></div>
     </dl>
   </div>
@@ -368,8 +598,8 @@
 
 <footer class="footer">
   <div class="wrap">
-    <p>Written by hand, no libraries: the portrait is a photo redrawn as text, the city is Dijkstra on a random road graph, the chart above is live from Codeforces. <a href="https://github.com/sepehrvahedi/sepehrvahedi.github.io">Read the source.</a></p>
-    <p class="kbd-hint">Keyboard: <kbd>:</kbd> command line, <kbd>j</kbd> <kbd>k</kbd> next and previous section, <kbd>t</kbd> theme.</p>
+    <p>Written by hand, no libraries: the portrait is a photo redrawn as text, the city is Dijkstra on a random road graph, the Codeforces chart is live. <a href="https://github.com/sepehrvahedi/sepehrvahedi.github.io">Read the source.</a></p>
+    <p class="kbd-hint">Keyboard: <kbd>:</kbd> command line, <kbd>j</kbd> <kbd>k</kbd> next and previous section.</p>
     <p id="weight"></p>
     <p>© 2026 Sepehr Vahedi</p>
   </div>
@@ -381,6 +611,6 @@
   <output id="cmd-out" for="cmd-in"></output>
 </form>
 
-<script src="js/main.js?v=20261125t" defer></script>
+<script src="js/main.js?v=20261126i" defer></script>
 </body>
 </html>
