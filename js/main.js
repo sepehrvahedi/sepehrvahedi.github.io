@@ -34,6 +34,19 @@ function setTheme(theme) {
 }
 $("#theme").addEventListener("click", () => setTheme(currentTheme() === "dark" ? "light" : "dark"));
 
+// ------------------------------------------------------------------ header on phones
+// Clear over the black hero at the top; it gains its bar once you scroll, and the name appears in it
+// only after the big name below the portrait has scrolled away (the way iOS collapses a large title).
+(() => {
+  const nav = $(".nav"), name = $(".name");
+  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 6);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  if (name && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => nav.classList.toggle("titled", !e.isIntersecting && e.boundingClientRect.top < 60),
+      { rootMargin: "-48px 0px 0px 0px" }).observe(name);
+  } else nav.classList.add("titled");
+})();
+
 // ------------------------------------------------------------------ mark the current section in the nav
 const navLinks = new Map([...document.querySelectorAll(".nav-links a")].map((a) => [a.getAttribute("href").slice(1), a]));
 let current = 0;
@@ -414,7 +427,9 @@ const portrait = (() => {
     if (taps.length > 40) taps.shift();
     if (!tapped) {
       tapped = true;
-      note.innerHTML = "That is the photo underneath. Each character stands for how dark a patch of it is. Drag sideways to paint.";
+      note.innerHTML = coarse
+        ? `<b>${count.toLocaleString("en-GB")} characters</b>, redrawn from a photo in your browser.`
+        : "That is the photo underneath. Each character stands for how dark a patch of it is.";
     }
     kick();
   }

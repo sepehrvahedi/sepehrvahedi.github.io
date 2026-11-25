@@ -328,7 +328,20 @@ kbd { font: 11px var(--mono); padding: 1px 5px; border-radius: 4px; border: 1px 
   .role { font-size: 19px; margin-top: 18px; }
   .hero-facts { margin-top: 28px; }
   .nav-links { display: none; }
-  .nav-tools { margin-left: auto; }
+  .nav-tools { margin-left: auto; gap: 2px; }
+  /* phones: the header starts as part of the black hero and becomes a translucent bar once you scroll */
+  .nav { height: calc(52px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background: var(--d-bg);
+    -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease; }
+  .nav.scrolled { background: rgba(22, 22, 23, 0.78); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom-color: rgba(255, 255, 255, 0.08); }
+  .nav-inner { padding: 0 16px 0 20px; }
+  .brand { font-size: 17px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
+  .nav.titled .brand { opacity: 1; transform: none; }
+  #open-cmd { display: none; }   /* the command line needs a keyboard */
+  .icon-btn { width: 40px; height: 40px; }
+  .icon-btn svg { width: 17px; height: 17px; }
+  .nav-cv { margin-left: 6px; font-size: 14px; font-weight: 600; color: #000; background: var(--d-ink); border-radius: 999px; padding: 6px 15px; }
+  .nav-cv:hover { text-decoration: none; }
   .hero-links { font-size: var(--s0); }
   .city-section { padding-top: 56px; }
   .city-frame { margin: 0 -20px; }
