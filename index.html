@@ -28,9 +28,10 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://sepehrvahedi.github.io/">
   <link rel="alternate" type="text/plain" href="cv.txt" title="CV as plain text">
-  <link rel="preload" as="image" href="assets/img/portrait-london.jpg">
+  <link rel="preload" as="image" href="assets/img/portrait-london.jpg" media="(min-width: 735px)">
+  <link rel="preload" as="image" href="assets/img/portrait-london-tall.jpg" media="(max-width: 734px)">
   <link rel="stylesheet" media="(hover: hover) and (pointer: fine) and (min-width: 961px)" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20261125o">
+  <link rel="stylesheet" href="css/style.css?v=20261125s">
   <script>
     document.documentElement.classList.add("js");
     try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
@@ -80,7 +81,10 @@
 <section class="hero dark" aria-labelledby="h-hero">
   <div class="wrap hero-grid">
     <figure class="ascii" id="ascii">
-      <img src="assets/img/portrait-london.jpg" width="880" height="1100" alt="Sepehr Vahedi" fetchpriority="high">
+      <picture>
+        <source media="(max-width: 734px)" srcset="assets/img/portrait-london-tall.jpg" width="800" height="1111">
+        <img src="assets/img/portrait-london.jpg" width="880" height="1100" alt="Sepehr Vahedi" fetchpriority="high">
+      </picture>
       <canvas aria-hidden="true"></canvas>
       <div class="note-me" aria-hidden="true">
         <p>This is me,<br>click on<br>the picture<span>based in London</span></p>
@@ -90,7 +94,10 @@
       <figcaption class="ascii-note mono" id="ascii-note">Sepehr Vahedi, London.</figcaption>
     </figure>
     <div class="hero-text">
-      <h1 id="h-hero" class="name">Sepehr<br>Vahedi</h1>
+      <div class="name-row">
+        <h1 id="h-hero" class="name">Sepehr<br>Vahedi</h1>
+        <a class="name-cv" href="assets/CV_Sepehr_Vahedi.pdf" download>Download CV</a>
+      </div>
       <p class="role">Software engineer. I make systems that millions of people use measurably faster, then prove they still give the same answers.</p>
       <ul class="hero-facts">
         <li><b>Tapsi</b> Nearly 4 years, co-op to Senior Software Engineer</li>
@@ -374,6 +381,6 @@
   <output id="cmd-out" for="cmd-in"></output>
 </form>
 
-<script src="js/main.js?v=20261125o" defer></script>
+<script src="js/main.js?v=20261125s" defer></script>
 </body>
 </html>

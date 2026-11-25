@@ -118,6 +118,8 @@ section + section:not(.tint):not(.dark):not(.feature) { border-top: 1px solid va
 .hero-facts b { color: var(--d-ink); font-weight: 600; }
 
 .ascii { position: relative; width: 100%; max-width: 560px; justify-self: end; }
+.ascii picture { display: block; }
+.name-cv { display: none; }
 .ascii img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; }
 .ascii canvas { position: absolute; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 4 / 5; touch-action: pan-y; cursor: crosshair; }
 /* with JavaScript the photo stays hidden until the text version replaces it, so it never flashes on load;
@@ -329,19 +331,19 @@ kbd { font: 11px var(--mono); padding: 1px 5px; border-radius: 4px; border: 1px 
   .hero-facts { margin-top: 28px; }
   .nav-links { display: none; }
   .nav-tools { margin-left: auto; gap: 2px; }
-  /* phones: the header starts as part of the black hero and becomes a translucent bar once you scroll */
-  .nav { height: calc(52px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background: var(--d-bg);
-    -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid transparent;
-    transition: background-color 0.3s ease, border-color 0.3s ease; }
-  .nav.scrolled { background: rgba(22, 22, 23, 0.78); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom-color: rgba(255, 255, 255, 0.08); }
-  .nav-inner { padding: 0 16px 0 20px; }
-  .brand { font-size: 17px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
-  .nav.titled .brand { opacity: 1; transform: none; }
-  #open-cmd { display: none; }   /* the command line needs a keyboard */
-  .icon-btn { width: 40px; height: 40px; }
-  .icon-btn svg { width: 17px; height: 17px; }
-  .nav-cv { margin-left: 6px; font-size: 14px; font-weight: 600; color: #000; background: var(--d-ink); border-radius: 999px; padding: 6px 15px; }
-  .nav-cv:hover { text-decoration: none; }
+  /* phones: no header; the taller picture starts at the top and the CV button sits beside the name */
+  .nav { display: none; }
+  html { scroll-padding-top: 0; }
+  .hero { padding-top: env(safe-area-inset-top); }
+  .ascii img, .ascii canvas, .tap-hint { aspect-ratio: 800 / 1111; }
+  .tap-ring { top: 36%; }
+  .ascii-note { display: none; }   /* phones: no caption under the picture */
+  .name-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .name-cv { display: inline-block; flex: none; margin-bottom: 8px; font: 600 15px var(--font); letter-spacing: -0.01em;
+    color: #000; background: var(--d-ink); border-radius: 999px; padding: 9px 16px; }
+  .dark .name-cv { color: #000; }
+  .name-cv:hover { text-decoration: none; }
+  .name-cv:active { transform: scale(0.97); }
   .hero-links { font-size: var(--s0); }
   .city-section { padding-top: 56px; }
   .city-frame { margin: 0 -20px; }

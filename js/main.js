@@ -34,19 +34,6 @@ function setTheme(theme) {
 }
 $("#theme").addEventListener("click", () => setTheme(currentTheme() === "dark" ? "light" : "dark"));
 
-// ------------------------------------------------------------------ header on phones
-// Clear over the black hero at the top; it gains its bar once you scroll, and the name appears in it
-// only after the big name below the portrait has scrolled away (the way iOS collapses a large title).
-(() => {
-  const nav = $(".nav"), name = $(".name");
-  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 6);
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
-  if (name && "IntersectionObserver" in window) {
-    new IntersectionObserver(([e]) => nav.classList.toggle("titled", !e.isIntersecting && e.boundingClientRect.top < 60),
-      { rootMargin: "-48px 0px 0px 0px" }).observe(name);
-  } else nav.classList.add("titled");
-})();
-
 // ------------------------------------------------------------------ mark the current section in the nav
 const navLinks = new Map([...document.querySelectorAll(".nav-links a")].map((a) => [a.getAttribute("href").slice(1), a]));
 let current = 0;
@@ -86,13 +73,20 @@ const portrait = (() => {
   const BLOCK = "\u2588";
   const CHARS = RAMP + NOISE + TEXT;
   const at = (c) => CHARS.indexOf(c);
-  const CLOCK = { x: 0.79, y: 0.183, r: 0.0568 };   // Big Ben's face, as fractions of the photo's width and height
+  // Phones get a taller crop of the same photo (no header there), so the clock and mask depend on which loaded.
+  // Big Ben's face: centre as fractions of the picture's width and height, radius as a fraction of its width.
+  const tall = () => /tall/.test(img.currentSrc || img.src);
+  const clockSpot = () => (tall() ? { x: 0.79, y: 0.2644, r: 0.0568 } : { x: 0.79, y: 0.183, r: 0.0568 });
   // 3 x 5 digits for the digital clock; each "pixel" is two characters wide
   const DIGITS = ["###/#.#/#.#/#.#/###", ".#./##./.#./.#./###", "###/..#/###/#../###", "###/..#/###/..#/###", "#.#/#.#/###/..#/..#",
     "###/#../###/..#/###", "###/#../###/#.#/###", "###/..#/..#/..#/..#", "###/#.#/###/#.#/###", "###/#.#/###/..#/###"].map((d) => d.split("/"));
-  const maskImg = new Image();
-  const maskReady = new Promise((ok) => { maskImg.onload = ok; maskImg.onerror = ok; });
-  maskImg.src = "assets/img/portrait-london-mask.png";
+  let maskImg = new Image(), maskFor = "";
+  function loadMask() {
+    const want = tall() ? "assets/img/portrait-london-tall-mask.png" : "assets/img/portrait-london-mask.png";
+    if (want === maskFor) return Promise.resolve();
+    maskFor = want; maskImg = new Image();
+    return new Promise((ok) => { maskImg.onload = ok; maskImg.onerror = ok; maskImg.src = want; });
+  }
 
   let W = 0, H = 0, dpr = 1, cols = 0, rows = 0, cw = 0, ch = 0, oy = 0;
   let glyph, delay, dither, outline, reserved, outlineDelay, clock = null, digital = null, atlas, mask, mctx, start = 0, raf = 0, visible = true, built = false, count = 0, tapped = false;
@@ -152,7 +146,7 @@ const portrait = (() => {
     glyph = new Uint8Array(cols * rows); delay = new Float32Array(cols * rows); count = 0;
     // each cell's own threshold, so characters leave and come back one by one rather than all at once
     dither = new Float32Array(cols * rows); for (let i = 0; i < dither.length; i++) dither[i] = Math.random();
-    const fx = W * 0.4, fy = H * 0.3, far = Math.hypot(W, H) * 0.7;
+    const fx = W * 0.4, fy = H * (tall() ? 0.36 : 0.3), far = Math.hypot(W, H) * 0.7;
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
       const a = (2 * r) * sw + 2 * c;
       const t = (v[a] + v[a + 1] + v[a + sw] + v[a + sw + 1]) / 4;
@@ -165,6 +159,7 @@ const portrait = (() => {
 
     // the outline: cells just outside the person, drawn with a stroke that follows the edge's direction
     outline = new Uint8Array(cols * rows); outlineDelay = new Float32Array(cols * rows);
+    let headTop = rows;   // first row of the person, from the mask below
     if (maskImg.naturalWidth) {
       const mo = document.createElement("canvas"); mo.width = cols; mo.height = rows;
       const mc = mo.getContext("2d", { willReadFrequently: true });
@@ -172,7 +167,7 @@ const portrait = (() => {
       const md = mc.getImageData(0, 0, cols, rows).data;
       const m = (c, r) => (c < 0 || r < 0 || c >= cols || r >= rows ? 0 : md[4 * (r * cols + c)] / 255);
       let sx = 0, sy = 0, n = 0;
-      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (m(c, r) > 0.5) { sx += c; sy += r; n++; }
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (m(c, r) > 0.5) { sx += c; sy += r; n++; if (r < headTop) headTop = r; }
       const mx = n ? sx / n : cols / 2, my = n ? sy / n : rows / 2;
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
         if (m(c, r) > 0.5) continue;
@@ -193,13 +188,20 @@ const portrait = (() => {
 
     // Big Ben's clock face, and a box of sky beside it for the digital clock
     reserved = new Uint8Array(cols * rows);
-    const ccx = CLOCK.x * W, ccy = CLOCK.y * H, cr = CLOCK.r * W;
+    const CLOCK = clockSpot(), ccx = CLOCK.x * W, ccy = CLOCK.y * H, cr = CLOCK.r * W;
     clock = { x: ccx, y: ccy, r: cr };
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
       if (Math.hypot(c * cw + cw / 2 - ccx, oy + r * ch + ch / 2 - ccy) < cr * 1.08) reserved[r * cols + c] = 1;
     }
-    const right = Math.round(cols * 0.66) - 1, width = 32, top = 1;
-    digital = { left: right - width + 1, top, right };
+    // laptops: a compact clock right-aligned beside the tower. phones (taller picture): wider digits, centred
+    // in the sky between the top edge, the top of the hair and the tower
+    if (headTop >= rows) headTop = Math.round(rows * 0.2);
+    const dpx = tall() ? 3 : 2, width = 12 * dpx + 7, tower = Math.round(cols * 0.66) - 1;
+    if (tall()) {
+      const left = Math.max(1, Math.round((tower - width) / 2)), top = Math.max(1, Math.round((headTop - 2 - 8) / 2));
+      digital = { left, top, right: left + width - 1, px: dpx, centred: true };
+    } else digital = { left: tower - width + 1, top: 1, right: tower, px: dpx, centred: false };
+    const { top } = digital, right = digital.right;
     for (let r = top; r < top + 8 && r < rows; r++) for (let c = digital.left; c <= right; c++) if (c >= 0) reserved[r * cols + c] = 2;
 
     // atlas: row 0 = the ramp with brightness baked in, row 1 = dim, row 2 = accent, row 3 = bright white
@@ -385,18 +387,19 @@ const portrait = (() => {
     const big = (n) => {
       const pattern = DIGITS[+hhmm[n]], flipping = !reduceMotion && wall - changedAt[n] < 380;
       if (flipping) busy = true;
-      for (let r = 0; r < 5; r++) for (let p = 0; p < 3; p++) for (let q = 0; q < 2; q++) {
-        const c = col + 2 * p + q, seed = r * 997 + c * 31 + n;
+      const px = digital.px;
+      for (let r = 0; r < 5; r++) for (let p = 0; p < 3; p++) for (let q = 0; q < px; q++) {
+        const c = col + px * p + q, seed = r * 997 + c * 31 + n;
         if (flipping) { if ((seed + frame) % 3) glyphAt(noiseK(seed), (seed + frame) % 2 ? 2 : 1, c * cw, oy + (top + r) * ch, cw, ch); continue; }
         if (pattern[r][p] === "#") cell(K, 3, c, top + r, seed);
       }
-      col += 6;
+      col += 3 * digital.px;
     };
     big(0); col += 1; big(1); col += 2;
     if ((reduceMotion || now.s % 2 === 0) && td > 500) { cell(K, 2, col, top + 1, 7); cell(K, 2, col, top + 3, 9); }
     col += 3; big(2); col += 1; big(3);
     const line = (text, r, row) => {
-      const start = digital.right - text.length + 1;
+      const start = digital.centred ? digital.left + Math.round((digital.right - digital.left + 1 - text.length) / 2) : digital.right - text.length + 1;
       for (let j = 0; j < text.length; j++) if (text[j] !== " ") cell(at(text[j]), row, start + j, r, r * 131 + j);
     };
     line(now.date, top + 6, 3);
@@ -427,7 +430,7 @@ const portrait = (() => {
     if (taps.length > 40) taps.shift();
     if (!tapped) {
       tapped = true;
-      note.innerHTML = coarse
+      note.innerHTML = coarse || matchMedia("(max-width: 734px)").matches
         ? `<b>${count.toLocaleString("en-GB")} characters</b>, redrawn from a photo in your browser.`
         : "That is the photo underneath. Each character stands for how dark a patch of it is.";
     }
@@ -462,7 +465,7 @@ const portrait = (() => {
 
   async function init() {
     try { await img.decode(); } catch (e) { if (!img.complete || !img.naturalWidth) { fig.classList.add("failed"); return; } }
-    await maskReady;
+    await loadMask();
     if (!build()) { fig.classList.add("failed"); return; }
     fig.classList.add("live");
     start = reduceMotion ? -1e9 : performance.now();
@@ -475,7 +478,8 @@ const portrait = (() => {
     let lastW = W;
     addEventListener("resize", () => {
       if (canvas.clientWidth === lastW) return;   // phones fire resize when the address bar moves
-      lastW = canvas.clientWidth; build(); kick();
+      lastW = canvas.clientWidth;
+      img.decode().catch(() => {}).then(loadMask).then(() => { build(); kick(); });
     });
   }
   init().catch(() => fig.classList.add("failed"));
